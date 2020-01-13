@@ -2,6 +2,8 @@ from Colors3D import *
 from Point3D import Point3D
 from Line3D import Line3D
 
+import pygame
+
 class Rect3D:    
     
     def __init__(self, p1=Point3D(), p2=Point3D(), p3=Point3D(), p4=Point3D(), stroke_color = WHITE, fill_color = WHITE, thickness = 1):
@@ -36,10 +38,9 @@ class Rect3D:
         return self
 
     def project(self, win_width, win_height, fov, viewer_distance):
-        return (self.l1.project(win_width, win_height, fov, viewer_distance), 
-                self.l2.project(win_width, win_height, fov, viewer_distance),
-                self.l3.project(win_width, win_height, fov, viewer_distance),
-                self.l4.project(win_width, win_height, fov, viewer_distance)
+        return (self.l1.p1.project(win_width, win_height, fov, viewer_distance), 
+                self.l1.p2.project(win_width, win_height, fov, viewer_distance),
+                self.l3.p1.project(win_width, win_height, fov, viewer_distance)                
                 )
 
     def draw(self, screen, fov, viewer_distance):
@@ -51,4 +52,14 @@ class Rect3D:
         self.l3.draw(screen, fov, viewer_distance)
         self.l4.draw(screen, fov, viewer_distance)
 
-        #DRAW RECTANGLE FILL       
+        #DRAW RECTANGLE FILL
+        p_p1, p_p2, p_p3 = self.l1.p1, self.l1.p2, self.l2.p2
+        fill_line = Line3D(p_p1, p_p2, self.fill_color, 15)
+        fill_line.draw(screen, fov, viewer_distance)
+        #p_p1 = self.l1.p1
+        #p_p2 = self.l1.p2
+        #p_p3 = self.l3.p1
+        #rect_width = p_p2.x - p_p1.x
+        #rect_height = p_p3.y - p_p2.y
+        #rect = (p_p1.x, p_p1.y, rect_width, rect_height)
+        #pygame.draw.rect(screen, self.fill_color, rect, self.thickness)
