@@ -1,7 +1,7 @@
 from Point3D import *
 
 class Simulation:
-    def __init__(self, win_width = 640, win_height = 480):
+    def __init__(self, win_width = 800, win_height = 600):
         pygame.init()
  
         self.screen = pygame.display.set_mode((win_width, win_height))
@@ -47,14 +47,14 @@ class Simulation:
                 # Put the point in the list of transformed vertices
                 t.append(p)
  
-            for f in self.faces:
+            for f in self.faces:                
                 pygame.draw.line(self.screen, (255,255,255), (t[f[0]].x, t[f[0]].y), (t[f[1]].x, t[f[1]].y))
                 pygame.draw.line(self.screen, (255,255,255), (t[f[1]].x, t[f[1]].y), (t[f[2]].x, t[f[2]].y))
                 pygame.draw.line(self.screen, (255,255,255), (t[f[2]].x, t[f[2]].y), (t[f[3]].x, t[f[3]].y))
                 pygame.draw.line(self.screen, (255,255,255), (t[f[3]].x, t[f[3]].y), (t[f[0]].x, t[f[0]].y))
  
             self.angleX += 1
-            #self.angleY += 1
-            #self.angleZ += 1
+            self.angleY += 1
+            self.angleZ += 1
  
             pygame.display.flip()

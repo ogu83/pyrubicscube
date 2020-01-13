@@ -28,6 +28,12 @@ class Paint:
         for start, end in self.__shape.lines:
             pygame.draw.line(self.__screen, RED, self.__fit(start), self.__fit(end), thickness)
 
+        #left =  self.__fit(self.__shape.lines[0].start)
+        #top =  self.__fit(self.__shape.lines[0].start)
+        #width = self.__fit(self.__shape.lines[0].end - self.__shape.lines[0].start)
+        #height = self.__fit(self.__shape.lines[1].end - self.__shape.lines[1].start)
+        #pygame.draw.rect(self.__screen, RED, pygame.rect(left,top,width,hegiht), thickness)
+
     def __mainloop(self):
         while True:
             self.__handle_events()

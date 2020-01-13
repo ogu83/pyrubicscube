@@ -5,7 +5,7 @@
 import sys, math, pygame
 
 class Point3D:
-    def __init__(self, x = 0, y = 0, z = 0):
+    def __init__(self, x = 0, y = 0, z = 0, color = WHITE, thickness = 1):
         self.x, self.y, self.z = float(x), float(y), float(z)
 
     def rotateX(self, angle):
@@ -40,4 +40,4 @@ class Point3D:
         factor = fov / (viewer_distance + self.z)
         x = self.x * factor + win_width / 2
         y = -self.y * factor + win_height / 2
-        return Point3D(x, y, 1)
+        return Point3D(x, y, 1)    

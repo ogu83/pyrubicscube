@@ -1,4 +1,6 @@
 from Simulation import *
+from Simulation2 import *
 
 if __name__ == "__main__":
-    Simulation().run()
+    simulation = Simulation2()
+    simulation.run()
