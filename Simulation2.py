@@ -1,11 +1,12 @@
 from Colors3D import *
 from Point3D import *
 from Line3D import *
+from Rect3D import *
 
 class Simulation2:         
     
-    lines = []
-    points = []
+    lines = []    
+    rects = []
 
     def __init__(self, win_width = 640, win_height = 480, fov = 256, viewer_distance = 4):
         self.fov = fov
@@ -18,8 +19,11 @@ class Simulation2:
 
         self.clock = pygame.time.Clock()
 
-        self.lines = [Line3D(Point3D(0,0,0), Point3D(0,1,0), WHITE, 4),
-                      Line3D(Point3D(0,0,0), Point3D(1,0,0), WHITE, 4)
+        #self.lines = [Line3D(Point3D(0,0,0), Point3D(0,1,0), WHITE, 4),
+        #              Line3D(Point3D(0,0,0), Point3D(1,0,0), WHITE, 4)
+        #              ]
+
+        self.rects = [Rect3D(Point3D(0,0,0), Point3D(1,0,0), Point3D(1,1,0),  Point3D(0,1,0), WHITE, RED, 4)
                       ]
 
         self.angleX, self.angleY, self.angleZ = 0, 0, 0        
@@ -33,6 +37,10 @@ class Simulation2:
 
             self.clock.tick(50)
             self.screen.fill(BLACK)
+
+            for rect in self.rects:
+                rect.rotateX(self.angleX).rotateY(self.angleY).rotateZ(self.angleZ)
+                rect.draw(self.screen, self.fov, self.viewer_distance)
 
             for line in self.lines:  
                 line.rotateX(self.angleX).rotateY(self.angleY).rotateZ(self.angleZ)

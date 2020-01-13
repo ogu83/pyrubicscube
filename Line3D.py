@@ -3,11 +3,8 @@ from Point3D import Point3D
 
 import pygame
 
-class Line3D:
-    p1 = Point3D()
-    p2 = Point3D()    
-
-    def __init__(self, p1, p2, color = WHITE, thickness = 1):
+class Line3D:    
+    def __init__(self, p1=Point3D(), p2=Point3D(), color = WHITE, thickness = 1):
         self.p1 = p1
         self.p2 = p2
         self.color = color
