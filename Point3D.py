@@ -2,6 +2,7 @@
 # Developed by Leonel Machava <leonelmachava@gmail.com>
 #http://codeNtronix.com
 
+from Colors3D import *
 import sys, math, pygame
 
 class Point3D:
@@ -40,4 +41,4 @@ class Point3D:
         factor = fov / (viewer_distance + self.z)
         x = self.x * factor + win_width / 2
         y = -self.y * factor + win_height / 2
-        return Point3D(x, y, 1)    
+        return Point3D(x, y, 1)

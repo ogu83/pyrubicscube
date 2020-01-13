@@ -16,17 +16,17 @@ class Line3D:
     def rotateX(self, angle):
         self.p1 = self.p1.rotateX(angle)
         self.p2 = self.p2.rotateX(angle)
-        return (self.p1, self.p2)
+        return self
 
     def rotateY(self, angle):
         self.p1 = self.p1.rotateY(angle)
         self.p2 = self.p2.rotateY(angle)
-        return (self.p1, self.p2)
+        return self
     
     def rotateZ(self, angle):
         self.p1 = self.p1.rotateZ(angle)
         self.p2 = self.p2.rotateZ(angle)
-        return (self.p1, self.p2)
+        return self
 
     def project(self, win_width, win_height, fov, viewer_distance):
         return (self.p1.project(win_width,win_height,fov,viewer_distance), 

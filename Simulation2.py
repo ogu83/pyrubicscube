@@ -19,7 +19,7 @@ class Simulation2:
         self.clock = pygame.time.Clock()
 
         self.lines = [Line3D(Point3D(0,0,0), Point3D(0,1,0), WHITE, 4),
-                      Line3D(Point3D(0,0,0), Point3D(1,0,0), WHITE, 4),
+                      Line3D(Point3D(0,0,0), Point3D(1,0,0), WHITE, 4)
                       ]
 
         self.angleX, self.angleY, self.angleZ = 0, 0, 0        
@@ -35,6 +35,11 @@ class Simulation2:
             self.screen.fill(BLACK)
 
             for line in self.lines:  
+                line.rotateX(self.angleX).rotateY(self.angleY).rotateZ(self.angleZ)
                 line.draw(self.screen, self.fov, self.viewer_distance)
+
+            self.angleX = 1
+            self.angleY = 1
+            self.angleZ = 1
 
             pygame.display.flip()
