@@ -4,6 +4,8 @@ from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
+import random
+
 verticies=(
     (1, -1, -1),
     (1, 1, -1),
@@ -84,12 +86,13 @@ def main():
     glEnable(GL_DEPTH_TEST)
 
     gluPerspective(45, (display[0]/display[1]), 0.1, 50)
-    glTranslatef(0, 0, -40)
+    glTranslatef(random.randrange(-5,5), random.randrange(-5,5), -40)
     glRotatef(0, 0, 0, 0)
     
-    object_passed = False
-    
-    
+    object_passed = False    
+
+    x_move = 0
+    y_move = 0
 
     while not object_passed:
         for event in pygame.event.get():
@@ -98,14 +101,24 @@ def main():
                 quit()
                 
             if event.type == pygame.KEYDOWN:
-                if (event.key == pygame.K_LEFT):
-                    glTranslatef(-0.5,0,0)
+                if (event.key == pygame.K_LEFT):                    
+                    x_move = 0.3
                 if (event.key == pygame.K_RIGHT):
-                    glTranslatef(0.5,0,0)
+                    x_move = -0.3
                 if (event.key == pygame.K_UP):
-                    glTranslatef(0,0.5,0)
+                    y_move = -0.3
                 if (event.key == pygame.K_DOWN):
-                    glTranslatef(0,-0.5,0)
+                    y_move = 0.3
+                    
+            if event.type == pygame.KEYUP:
+                if (event.key == pygame.K_LEFT):                   
+                    x_move = 0
+                if (event.key == pygame.K_RIGHT):
+                    x_move = -0
+                if (event.key == pygame.K_UP):
+                    y_move = -0
+                if (event.key == pygame.K_DOWN):
+                    y_move = 0                              
                     
             # if event.type == pygame.MOUSEBUTTONDOWN:
                 # if event.button == 4:
@@ -127,6 +140,8 @@ def main():
             object_passed = True
         
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
+        
+        glTranslatef(x_move,y_move,0)
         Cube()
         pygame.display.flip()
         pygame.time.wait(10)
