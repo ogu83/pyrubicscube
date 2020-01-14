@@ -57,6 +57,13 @@ colors = (
     (0,1,1),
 )
 
+def set_vertices(max_distance):
+    x_value_change = random.randrange(-10,10)
+    y_value_change = random.randrange(-10,10)
+    z_value_change = random.randrange(-1 * max_distance, -20)
+
+        
+
 def Cube():
     
     glBegin(GL_QUADS)
@@ -73,6 +80,7 @@ def Cube():
     
     for edge in edges:
         for vertex in edge:
+            glColor3fv(colors[0])
             glVertex3fv(verticies[vertex])
     
     glEnd()
