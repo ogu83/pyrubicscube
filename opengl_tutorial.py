@@ -78,14 +78,20 @@ def Cube():
 
 def main():
     pygame.init()
-    display = (800,600)
+    
+    display = (800,600)    
     pygame.display.set_mode(display, DOUBLEBUF|OPENGL)
+    glEnable(GL_DEPTH_TEST)
 
     gluPerspective(45, (display[0]/display[1]), 0.1, 50)
-    glTranslatef(0, 0, -25)
-    glRotatef(25, 2, 1, 0)
+    glTranslatef(0, 0, -40)
+    glRotatef(0, 0, 0, 0)
+    
+    object_passed = False
+    
+    
 
-    while True:
+    while not object_passed:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -101,16 +107,32 @@ def main():
                 if (event.key == pygame.K_DOWN):
                     glTranslatef(0,-0.5,0)
                     
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 4:
-                    glTranslatef(0,0,-1.0)
-                if event.button == 5:
-                    glTranslatef(0,0,1.0)
+            # if event.type == pygame.MOUSEBUTTONDOWN:
+                # if event.button == 4:
+                    # glTranslatef(0,0,-1.0)
+                # if event.button == 5:
+                    # glTranslatef(0,0,1.0)
 
         # glRotatef(1, 5, 5, 5)
+        glTranslatef(0,0,0.5)
+        
+        x = glGetDoublev(GL_MODELVIEW_MATRIX)
+        #print(x)
+        
+        camera_x = x[3][0]
+        camera_y = x[3][1]
+        camera_z = x[3][2]
+        
+        if (camera_z < -1):
+            object_passed = True
+        
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
         Cube()
         pygame.display.flip()
         pygame.time.wait(10)
-        
-main()
+
+for x in range(10):
+    main()
+    
+pygame.quit()
+quit()
