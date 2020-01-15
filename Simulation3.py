@@ -54,7 +54,9 @@ class Vertex3D:
         return Vertex3D(x, y, self.z)
         
 class Cube3D:
-    angle_x = 0    
+    angle_x = [0,0]
+    angle_y = [0,0]
+    angle_z = [0,0]
 
     verticies=[
     [1.0, -1.0, -1.0],
@@ -91,12 +93,13 @@ class Cube3D:
         (4,0,3,6),
     )
 
-    def __init__(self, size, color):
-        self.size = float(size)
-        self.color = color
+    def __init__(self, size):
+        self.size = float(size)        
         self.verticies = np.array(self.verticies) * size
         
     def draw(self):
+        self.do_animations()
+        
         # glBegin(GL_QUADS)
         # glColor3fv(self.color)
         # for surface in self.surfaces:
@@ -109,46 +112,75 @@ class Cube3D:
             for vertex in edge:
                 glColor3fv(WHITE)
                 glVertex3fv(self.verticies[vertex])        
-        glEnd()              
+        glEnd()
+
+
+    def assing_vertex(self, vertex, v):
+        for i in range(len(vertex)):
+            vertex[i] = v[i]    
+
+    def assing_rotate_all_vertex(self,rotation_matrix):
+        for vertex in self.verticies:
+            v = rotation_matrix.dot(vertex)
+            self.assing_vertex(vertex,v)
         
     def rotateX(self, angle):
         rad = angle * math.pi / 180
         cosa = (math.cos(rad))
-        sina = (math.sin(rad))
-        
-        r_y = np.array([[1.0,0.0,0.0],[0.0,cosa,-sina],[0,sina,cosa]])
-        
-        for vertex in self.verticies:
-            v = r_y.dot(vertex)
-            vertex[0] = v[0]
-            vertex[1] = v[1]
-            vertex[2] = v[2]
+        sina = (math.sin(rad))        
+        rotation_matrix = np.array([[1.0,0.0,0.0],[0.0,cosa,-sina],[0,sina,cosa]])
+        self.assing_rotate_all_vertex(rotation_matrix)        
         
     def rotateY(self, angle):
         rad = angle * math.pi / 180
         cosa = (math.cos(rad))
-        sina = (math.sin(rad))
-        
-        r_y = np.array([[cosa,0.0,sina],[0.0,1.0,0.0],[-sina,0.0,cosa]])
-        
-        for vertex in self.verticies:
-            v = r_y.dot(vertex)
-            vertex[0] = v[0]
-            vertex[1] = v[1]
-            vertex[2] = v[2]
+        sina = (math.sin(rad))        
+        rotation_matrix = np.array([[cosa,0.0,sina],[0.0,1.0,0.0],[-sina,0.0,cosa]])
+        self.assing_rotate_all_vertex(rotation_matrix)
         
     def rotateZ(self, angle):
         rad = angle * math.pi / 180
         cosa = (math.cos(rad))
-        sina = (math.sin(rad))
+        sina = (math.sin(rad))        
+        rotation_matrix = np.array([[cosa,-sina,0.0],[sina,cosa,0.0],[0.0,0.0,1.0]])
+        self.assing_rotate_all_vertex(rotation_matrix)
         
-        r_z = np.array([[cosa,-sina,0.0],[sina,cosa,0.0],[0.0,0.0,1.0]])
+    def do_animations(self):
+        if (self.angle_x[0] < self.angle_x[1]):
+            self.angle_x[0] += 1
+            self.rotateX(1)
+        elif (self.angle_x[0] > self.angle_x[1]):
+            self.angle_x[0] -= 1
+            self.rotateX(-1)
+            
+        if (self.angle_y[0] < self.angle_y[1]):
+            self.angle_y[0] += 1
+            self.rotateY(1)
+        elif (self.angle_y[0] > self.angle_y[1]):
+            self.angle_y[0] -= 1
+            self.rotateY(-1)
+            
+        if (self.angle_z[0] < self.angle_z[1]):
+            self.angle_y[0] += 1
+            self.rotateY(1)
+        elif (self.angle_z[0] > self.angle_z[1]):
+            self.angle_z[0] -= 1
+            self.rotateZ(-1)
+            
+    def is_on_animation(self):
+        return (self.angle_x[0] == self.angle_x[1] and self.angle_y[0] == self.angle_y[1] and self.angle_z[0] == self.angle_z[1]) == False
         
-        for vertex in self.verticies:
-            v = r_z.dot(vertex)
-            vertex[0] = v[0]
-            vertex[1] = v[1]
-            vertex[2] = v[2]
+    def animated_rotateX(self,angle):
+        if (not self.is_on_animation()):
+            self.angle_x[1]+=angle
+        
+    def animated_rotateY(self,angle):
+        if (not self.is_on_animation()):
+            self.angle_y[1]+=angle
+        
+    def animated_rotateZ(self,angle):        
+        if (not self.is_on_animation()):
+            self.angle_z[1]+=angle
 
 class Simulation3:   
     def __init__(self, win_width = 800, win_height = 600):
@@ -166,7 +198,7 @@ class Simulation3:
         # glRotatef(15, 1, 1, 0)
         glTranslatef(-4, -4, -25)
         
-        cube = Cube3D(3, RED)
+        cube = Cube3D(3)
         
         while True:
         
@@ -177,13 +209,13 @@ class Simulation3:
                     
                 if event.type == pygame.KEYDOWN:
                     if (event.key == pygame.K_LEFT):
-                        cube.rotateY(10)
+                        cube.animated_rotateY(-90)
                     if (event.key == pygame.K_RIGHT):
-                        cube.rotateY(-10)
+                        cube.animated_rotateY(90)
                     if (event.key == pygame.K_UP):
-                        cube.rotateX(-10)
+                        cube.animated_rotateX(-90)
                     if (event.key == pygame.K_DOWN):
-                        cube.rotateX(10)
+                        cube.animated_rotateX(90)
                                             
             glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
                         
