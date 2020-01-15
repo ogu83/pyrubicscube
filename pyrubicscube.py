@@ -1,6 +1,7 @@
-from Simulation import *
-from Simulation2 import *
+# from Simulation import *
+# from Simulation2 import *
+from Simulation3 import *
 
 if __name__ == "__main__":
-    simulation = Simulation2()
+    simulation = Simulation3()
     simulation.run()

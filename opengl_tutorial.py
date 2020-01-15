@@ -60,9 +60,7 @@ colors = (
 def set_vertices(max_distance):
     x_value_change = random.randrange(-10,10)
     y_value_change = random.randrange(-10,10)
-    z_value_change = random.randrange(-1 * max_distance, -20)
-
-        
+    z_value_change = random.randrange(-1 * max_distance, -20)        
 
 def Cube():
     
