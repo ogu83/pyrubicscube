@@ -17,6 +17,11 @@ class Simulation3:
     last_mouse_pos = (0,0)
     mouse_sensitivity = 50
     
+    on_key_w = False
+    on_key_a = False
+    on_key_s = False
+    on_key_d = False
+    
     def __init__(self, win_width = 800, win_height = 600):
         self.win_width = win_width
         self.win_height = win_height
@@ -43,12 +48,29 @@ class Simulation3:
                 elif event.type == pygame.KEYDOWN:
                     if (event.key == pygame.K_LEFT):
                         cube.animated_rotateY(-90)
-                    if (event.key == pygame.K_RIGHT):
+                    elif (event.key == pygame.K_RIGHT):
                         cube.animated_rotateY(90)
-                    if (event.key == pygame.K_UP):
+                    elif (event.key == pygame.K_UP):
                         cube.animated_rotateX(-90)
-                    if (event.key == pygame.K_DOWN):
-                        cube.animated_rotateX(90)            
+                    elif (event.key == pygame.K_DOWN):
+                        cube.animated_rotateX(90)
+                    elif (event.key == pygame.K_w):
+                        self.on_key_w = True
+                    elif (event.key == pygame.K_a):
+                        self.on_key_a = True
+                    elif (event.key == pygame.K_s):
+                        self.on_key_s = True
+                    elif (event.key == pygame.K_d):
+                        self.on_key_d = True
+                elif event.type == pygame.KEYUP:
+                    if (event.key == pygame.K_w):
+                        self.on_key_w = False
+                    elif (event.key == pygame.K_a):
+                        self.on_key_a = False
+                    elif (event.key == pygame.K_s):
+                        self.on_key_s = False
+                    elif (event.key == pygame.K_d):
+                        self.on_key_d = False
                 elif event.type == pygame.MOUSEMOTION:
                     if (self.left_click_on):
                         cam_x = (event.pos[0] - self.last_mouse_pos[0])/self.mouse_sensitivity
@@ -56,7 +78,7 @@ class Simulation3:
                         glTranslatef(cam_x, 0, cam_y)
                         self.last_mouse_pos = event.pos
                     elif (self.right_click_on):
-                        cam_y = -(event.pos[0] - self.last_mouse_pos[0])/self.mouse_sensitivity
+                        cam_y = (event.pos[0] - self.last_mouse_pos[0])/self.mouse_sensitivity
                         cam_z = (event.pos[1] - self.last_mouse_pos[1])/self.mouse_sensitivity
                         glTranslatef(0, cam_y, cam_z)
                         self.last_mouse_pos = event.pos
@@ -72,8 +94,17 @@ class Simulation3:
                 elif event.type == pygame.MOUSEBUTTONUP and event.button == RIGHT:
                     self.right_click_on = False
                     self.last_mouse_pos = (0,0)
+                    
+            if (self.on_key_w):
+                glTranslatef(1/self.mouse_sensitivity,0,0)
+            if (self.on_key_s):
+                glTranslatef(-1/self.mouse_sensitivity,0,0)
+            if (self.on_key_d):
+                glTranslatef(0,-1/self.mouse_sensitivity,0)
+            if (self.on_key_a):
+                glTranslatef(0,1/self.mouse_sensitivity,0)
                                             
-            glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
+            glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)                      
                         
             grid.draw()
             cube.draw()
