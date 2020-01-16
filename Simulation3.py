@@ -7,7 +7,7 @@ from OpenGL_Geometry import *
 from OpenGL_Colors import *
 
 class Simulation3:   
-    def __init__(self, win_width = 800, win_height = 600):
+    def __init__(self, win_width = 640, win_height = 480):
         self.win_width = win_width
         self.win_height = win_height
 
@@ -18,12 +18,13 @@ class Simulation3:
         pygame.display.set_mode(display, DOUBLEBUF|OPENGL)
         glEnable(GL_DEPTH_TEST)
 
-        gluPerspective(45, (display[0]/display[1]), 0.1, 50)
-        glRotatef(15, 1, 0, 0)
-        glTranslatef(0, -4, -25)
+        gluPerspective(45, (display[0]/display[1]), 0.1, 100)
+        glRotatef(45, 0.5, -0.5, -0.125)
+        glTranslatef(-25, -25, -25)
         
-        cube = Cube3D(3)
-        
+        cube = Cube3D(4)
+        grid = Grid3D(4, 64, 64)
+                
         while True:
         
             for event in pygame.event.get():
@@ -43,7 +44,8 @@ class Simulation3:
                                             
             glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
                         
+            grid.draw()
             cube.draw()
             
             pygame.display.flip()
-            pygame.time.wait(10)    
+            pygame.time.wait(1)
