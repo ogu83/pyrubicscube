@@ -5,6 +5,17 @@ from OpenGL_Colors import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
+UNIT_CUBE_VERTICIES=[
+    [1.0, -1.0, -1.0],
+    [1.0, 1.0, -1.0],
+    [-1.0, 1.0, -1.0],
+    [-1.0, -1.0, -1.0],
+    [1.0, -1.0, 1.0],
+    [1.0, 1.0, 1.0],
+    [-1.0, -1.0, 1.0],
+    [-1.0, 1.0, 1.0],
+]
+
 class Grid3D:
     def __init__(self, size = 1, depth_x = 50, depth_y = 50, color = GRAY):
         self.size = size
@@ -29,20 +40,11 @@ class Grid3D:
         glEnd()
         
 class Cube3D:
-    angle_x = [0, 0]
-    angle_y = [0, 0]
-    angle_z = [0, 0]
+    angle_x = [0, 0, False]
+    angle_y = [0, 0, False]
+    angle_z = [0, 0, False]
 
-    verticies=[
-        [1.0, -1.0, -1.0],
-        [1.0, 1.0, -1.0],
-        [-1.0, 1.0, -1.0],
-        [-1.0, -1.0, -1.0],
-        [1.0, -1.0, 1.0],
-        [1.0, 1.0, 1.0],
-        [-1.0, -1.0, 1.0],
-        [-1.0, 1.0, 1.0],
-    ]
+    verticies = UNIT_CUBE_VERTICIES
     
     edges = (
         (0,1),
@@ -114,18 +116,23 @@ class Cube3D:
     def assing_rotate_all_vertex(self,rotation_matrix):
         for vertex in self.verticies:
             v = rotation_matrix.dot(vertex)
-            self.assing_vertex(vertex,v)
+            self.assing_vertex(vertex, v)    
         
-    def rotateX(self, angle):
+    def rotateX(self, angle, use_self_center=False):        
         rad = angle * math.pi / 180
         cosa = (math.cos(rad))
         sina = (math.sin(rad))        
         rotation_matrix = np.array([[1.0, 0.0, 0.0],
                                     [0.0, cosa, -sina],
                                     [0.0, sina, cosa]])
-        self.assing_rotate_all_vertex(rotation_matrix)
+
+        if (use_self_center):            
+            #TODO:Rotation matrix degisecek
+            self.assing_rotate_all_vertex(rotation_matrix)            
+        else:
+            self.assing_rotate_all_vertex(rotation_matrix)
         
-    def rotateY(self, angle):
+    def rotateY(self, angle,use_self_center=False):
         rad = angle * math.pi / 180
         cosa = (math.cos(rad))
         sina = (math.sin(rad))        
@@ -134,7 +141,7 @@ class Cube3D:
                                     [-sina, 0.0, cosa]])
         self.assing_rotate_all_vertex(rotation_matrix)
         
-    def rotateZ(self, angle):
+    def rotateZ(self, angle,use_self_center=False):
         rad = angle * math.pi / 180
         cosa = (math.cos(rad))
         sina = (math.sin(rad))
@@ -154,31 +161,32 @@ class Cube3D:
     def do_animations(self, speed=15):
         if (self.angle_x[0] < self.angle_x[1]):
             self.angle_x[0] += speed
-            self.rotateX(speed)
+            self.rotateX(speed, self.angle_x[2])
         elif (self.angle_x[0] > self.angle_x[1]):
             self.angle_x[0] -= speed
-            self.rotateX(-speed)
+            self.rotateX(-speed, self.angle_x[2])
             
         if (self.angle_y[0] < self.angle_y[1]):
             self.angle_y[0] += speed
-            self.rotateY(speed)
+            self.rotateY(speed, self.angle_y[2])
         elif (self.angle_y[0] > self.angle_y[1]):
             self.angle_y[0] -= speed
-            self.rotateY(-speed)
+            self.rotateY(-speed, self.angle_y[2])
             
         if (self.angle_z[0] < self.angle_z[1]):
             self.angle_y[0] += speed
-            self.rotateY(speed)
+            self.rotateZ(speed, self.angle_z[2])
         elif (self.angle_z[0] > self.angle_z[1]):
             self.angle_z[0] -= speed
-            self.rotateZ(-speed)
+            self.rotateZ(-speed, self.angle_z[2])
             
     def is_on_animation(self):
         return (self.angle_x[0] == self.angle_x[1] and self.angle_y[0] == self.angle_y[1] and self.angle_z[0] == self.angle_z[1]) == False
         
-    def animated_rotateX(self,angle):
+    def animated_rotateX(self, angle, use_self_center):
         if (not self.is_on_animation()):
             self.angle_x[1] += angle
+            self.angle_x[2] = use_self_center
         
     def animated_rotateY(self,angle):
         if (not self.is_on_animation()):

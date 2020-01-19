@@ -39,7 +39,7 @@ class Simulation3:
         
         cube = Cube3D(4)
         grid = Grid3D(4, 32,32)
-#        cube.translate_size([0, 1, 0]) 
+        cube.translate_size([0, 1, 0]) 
         
         while True:       
             for event in pygame.event.get():
@@ -52,9 +52,9 @@ class Simulation3:
                     elif (event.key == pygame.K_RIGHT):
                         cube.animated_rotateY(90)
                     elif (event.key == pygame.K_UP):
-                        cube.animated_rotateX(-90)
+                        cube.animated_rotateX(-90, True)
                     elif (event.key == pygame.K_DOWN):
-                        cube.animated_rotateX(90)
+                        cube.animated_rotateX(90, True)
                     elif (event.key == pygame.K_w):
                         self.on_key_w = True
                     elif (event.key == pygame.K_a):
