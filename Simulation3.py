@@ -39,7 +39,7 @@ class Simulation3:
         
         cube = Cube3D(4)
         grid = Grid3D(4, 32,32)
-        cube.translate_size([0, 1, 0]) 
+        cube.translate_size([0, 1, 0], True) 
         
         while True:       
             for event in pygame.event.get():

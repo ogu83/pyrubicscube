@@ -45,6 +45,8 @@ class Cube3D:
     angle_z = [0, 0, False]
 
     verticies = UNIT_CUBE_VERTICIES
+
+    translate_matrix = [0, 0, 0]
     
     edges = (
         (0,1),
@@ -126,9 +128,11 @@ class Cube3D:
                                     [0.0, cosa, -sina],
                                     [0.0, sina, cosa]])
 
-        if (use_self_center):            
-            #TODO:Rotation matrix degisecek
+        if (use_self_center):
+            tran_matrix = self.translate_matrix
+            self.translate_size(-1*np.array(tran_matrix), False)
             self.assing_rotate_all_vertex(rotation_matrix)            
+            self.translate_size(tran_matrix, False)
         else:
             self.assing_rotate_all_vertex(rotation_matrix)
         
@@ -139,7 +143,14 @@ class Cube3D:
         rotation_matrix = np.array([[cosa, 0.0, sina],
                                     [0.0, 1.0, 0.0],
                                     [-sina, 0.0, cosa]])
-        self.assing_rotate_all_vertex(rotation_matrix)
+        
+        if (use_self_center):
+            tran_matrix = self.translate_matrix
+            self.translate_size(-1*np.array(tran_matrix), False)
+            self.assing_rotate_all_vertex(rotation_matrix)            
+            self.translate_size(tran_matrix, False)
+        else:
+            self.assing_rotate_all_vertex(rotation_matrix)
         
     def rotateZ(self, angle,use_self_center=False):
         rad = angle * math.pi / 180
@@ -148,12 +159,25 @@ class Cube3D:
         rotation_matrix = np.array([[cosa, -sina, 0.0],
                                     [sina, cosa, 0.0],
                                     [0.0, 0.0, 1.0]])
-        self.assing_rotate_all_vertex(rotation_matrix)
+        
+        if (use_self_center):
+            tran_matrix = self.translate_matrix
+            self.translate_size(-1*np.array(tran_matrix), False)
+            self.assing_rotate_all_vertex(rotation_matrix)            
+            self.translate_size(tran_matrix, False)
+        else:
+            self.assing_rotate_all_vertex(rotation_matrix)
 
-    def translate_size(self, translate_matrix):
-        self.translate(np.array(translate_matrix) * self.size)
+    def translate_size(self, translate_matrix, permanent):        
+        if permanent:
+            self.translate_matrix = list(np.array(self.translate_matrix) + np.array(translate_matrix))
 
-    def translate(self, translate_matrix):
+        self.translate(np.array(translate_matrix) * self.size, False)
+
+    def translate(self, translate_matrix, permanent):
+        if permanent:
+            self.translate_matrix = list(np.array(self.translate_matrix) + np.array(translate_matrix))
+
         for vertex in self.verticies:
             v = np.array(vertex) + np.array(translate_matrix)
             self.assing_vertex(vertex, v)
