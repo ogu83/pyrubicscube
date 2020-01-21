@@ -1,10 +1,11 @@
 import numpy as np
 import sys, math, pygame, random
 from pygame.locals import *
-from OpenGL.GL import *
-from OpenGL.GLU import *
-from OpenGL_Geometry import *
-from OpenGL_Colors import *
+# from OpenGL.GL import *
+# from OpenGL.GLU import *
+# from OpenGL_Geometry import *
+# from OpenGL_Colors import *
+from Cube222 import *
 
 LEFT = 1
 RIGHT = 3
@@ -37,9 +38,10 @@ class Simulation3:
         glRotatef(45, 0.5, -0.5, -0.125)
         glTranslatef(-25, -25, -25)
         
-        cube = Cube3D(4)
+        #cube = Cube3D(4)
         grid = Grid3D(4, 32,32)
-        cube.translate_size([0, 1, 0], True) 
+        #cube.translate_size([0, 1, 0], True) 
+        cube = Cube222(4)
         
         while True:       
             for event in pygame.event.get():
@@ -48,9 +50,9 @@ class Simulation3:
                     quit()                   
                 elif event.type == pygame.KEYDOWN:
                     if (event.key == pygame.K_LEFT):
-                        cube.animated_rotateY(-90)
+                        cube.animated_rotateY(-90, True)
                     elif (event.key == pygame.K_RIGHT):
-                        cube.animated_rotateY(90)
+                        cube.animated_rotateY(90, True)
                     elif (event.key == pygame.K_UP):
                         cube.animated_rotateX(-90, True)
                     elif (event.key == pygame.K_DOWN):

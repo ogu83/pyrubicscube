@@ -13,7 +13,7 @@ UNIT_CUBE_VERTICIES=[
     [1.0, -1.0, 1.0],
     [1.0, 1.0, 1.0],
     [-1.0, -1.0, 1.0],
-    [-1.0, 1.0, 1.0],
+    [-1.0, 1.0, 1.0]
 ]
 
 class Grid3D:
@@ -205,17 +205,21 @@ class Cube3D:
             self.rotateZ(-speed, self.angle_z[2])
             
     def is_on_animation(self):
-        return (self.angle_x[0] == self.angle_x[1] and self.angle_y[0] == self.angle_y[1] and self.angle_z[0] == self.angle_z[1]) == False
+        return (self.angle_x[0] == self.angle_x[1] 
+            and self.angle_y[0] == self.angle_y[1] 
+            and self.angle_z[0] == self.angle_z[1]) == False
         
     def animated_rotateX(self, angle, use_self_center):
         if (not self.is_on_animation()):
             self.angle_x[1] += angle
             self.angle_x[2] = use_self_center
         
-    def animated_rotateY(self,angle):
+    def animated_rotateY(self, angle, use_self_center):
         if (not self.is_on_animation()):
             self.angle_y[1] += angle
+            self.angle_y[2] = use_self_center
         
-    def animated_rotateZ(self,angle):
+    def animated_rotateZ(self,angle, use_self_center):
         if (not self.is_on_animation()):
             self.angle_z[1] += angle
+            self.angle_z[2] = use_self_center
