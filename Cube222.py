@@ -55,16 +55,7 @@ class Cube222:
         self.Cube8 = Cube8(size / 2)
 
     def cube_array(self):
-        return [
-            self.Cube1,
-            self.Cube2,
-            self.Cube3,
-            self.Cube4,
-            self.Cube5,
-            self.Cube6,
-            self.Cube7,
-            self.Cube8,
-        ]
+        return [self.Cube1, self.Cube2, self.Cube3, self.Cube4, self.Cube5, self.Cube6, self.Cube7, self.Cube8]
         
     def u_matrix(self):
         position_matrix = self.position_matrix

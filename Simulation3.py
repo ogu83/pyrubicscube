@@ -113,7 +113,41 @@ class Simulation3:
             if (self.on_key_a):
                 glTranslatef(0, 1 / self.mouse_sensitivity, 0)
                                             
-            glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)                      
+            glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
+            
+            # # Generate a texture
+            # img = pygame.font.Font(None, 15).render("Hello", True, (255, 255, 255))
+            # w, h = img.get_size()
+            # texture = glGenTextures(1)
+            # glPixelStorei(GL_UNPACK_ALIGNMENT, 1)
+            # glBindTexture(GL_TEXTURE_2D, texture)
+            # glTexParameter(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+            # glTexParameter(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
+            # data = pygame.image.tostring(img, "RGBA", 1)
+            # glTexImage2D(GL_TEXTURE_2D, 0, 4, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data)
+            
+            # # glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+
+            # # Display texture
+            # glBindTexture(GL_TEXTURE_2D, texture)
+            # glMatrixMode(GL_PROJECTION)
+            # # glLoadIdentity()
+            # # glTranslate(-1, -1, 0)
+            # # glScale(2 / 600, 2 / 400, 1)
+            # glEnable(GL_BLEND)
+            # glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+            # glEnable(GL_TEXTURE_2D)
+            # #glDisable(GL_DEPTH_TEST)
+            # glDisable(GL_CULL_FACE)
+            # glDisable(GL_LIGHTING)
+            # glBegin(GL_QUADS)
+            # x0, y0 = -5, 14
+            # w, h = img.get_size()
+            # for dx, dy in [(0, 0), (0, 1), (1, 1), (1, 0)]:
+                # glVertex(x0 + dx * w, y0 + dy * h, 0)
+                # glTexCoord(dy, 1 - dx)
+            # glEnd()
+            # glMatrixMode(GL_MODELVIEW)
                         
             grid.draw()
             cube.draw()
