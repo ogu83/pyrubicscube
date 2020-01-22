@@ -38,8 +38,9 @@ class Simulation3:
         glRotatef(45, 0.5, -0.5, -0.125)
         glTranslatef(-25, -25, -25)
         
-        #cube = Cube3D(4)
         grid = Grid3D(4, 32,32)
+        
+        #cube = Cube3D(4)        
         #cube.translate_size([0, 1, 0], True) 
         cube = Cube222(4)
         
@@ -50,13 +51,17 @@ class Simulation3:
                     quit()                   
                 elif event.type == pygame.KEYDOWN:
                     if (event.key == pygame.K_LEFT):
-                        cube.animated_rotateY(-90, True)
+                        # cube.animated_rotateY(-90, True)
+                        cube.do_notation("l")
                     elif (event.key == pygame.K_RIGHT):
-                        cube.animated_rotateY(90, True)
+                        # cube.animated_rotateY(90, True)
+                        cube.do_notation("r")
                     elif (event.key == pygame.K_UP):
-                        cube.animated_rotateX(-90, True)
+                        # cube.animated_rotateX(-90, True)
+                        cube.do_notation("u")
                     elif (event.key == pygame.K_DOWN):
-                        cube.animated_rotateX(90, True)
+                        # cube.animated_rotateX(90, True)
+                        cube.do_notation("d")
                     elif (event.key == pygame.K_w):
                         self.on_key_w = True
                     elif (event.key == pygame.K_a):

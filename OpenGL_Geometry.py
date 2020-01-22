@@ -39,14 +39,7 @@ class Grid3D:
                 glVertex3fv(v2 - tran_matrix)
         glEnd()
         
-class Cube3D:
-    angle_x = [0, 0, False]
-    angle_y = [0, 0, False]
-    angle_z = [0, 0, False]
-
-    verticies = UNIT_CUBE_VERTICIES
-
-    translate_matrix = [0, 0, 0]
+class Cube3D:        
     
     edges = (
         (0,1),
@@ -74,13 +67,23 @@ class Cube3D:
 
     def __init__(self, size = 1, color_u=YELLOW, color_d=WHITE, color_f=BLUE, color_b=GREEN, color_l=ORANGE, color_r=RED):
         self.size = float(size)        
+        
+        self.translate_matrix = [0, 0, 0]
+        
+        self.verticies = UNIT_CUBE_VERTICIES
+        
         self.verticies = np.array(self.verticies) * size
+        
         self.color_d = color_d #WHITE
         self.color_u = color_u #YELLOW
         self.color_b = color_b #GREEN                
         self.color_f = color_f #BLUE                        
         self.color_l = color_l #ORANGE
         self.color_r = color_r #RED
+        
+        self.angle_x = [0, 0, False]
+        self.angle_y = [0, 0, False]
+        self.angle_z = [0, 0, False]        
         
     def getColorArray(self):
         return [            
@@ -113,9 +116,9 @@ class Cube3D:
 
     def assing_vertex(self, vertex, v):
         for i in range(len(vertex)):
-            vertex[i] = v[i]    
+            vertex[i] = v[i]
 
-    def assing_rotate_all_vertex(self,rotation_matrix):
+    def assing_rotate_all_vertex(self, rotation_matrix):
         for vertex in self.verticies:
             v = rotation_matrix.dot(vertex)
             self.assing_vertex(vertex, v)    
@@ -136,7 +139,7 @@ class Cube3D:
         else:
             self.assing_rotate_all_vertex(rotation_matrix)
         
-    def rotateY(self, angle,use_self_center=False):
+    def rotateY(self, angle, use_self_center=False):
         rad = angle * math.pi / 180
         cosa = (math.cos(rad))
         sina = (math.sin(rad))        
@@ -152,7 +155,7 @@ class Cube3D:
         else:
             self.assing_rotate_all_vertex(rotation_matrix)
         
-    def rotateZ(self, angle,use_self_center=False):
+    def rotateZ(self, angle, use_self_center=False):
         rad = angle * math.pi / 180
         cosa = (math.cos(rad))
         sina = (math.sin(rad))
