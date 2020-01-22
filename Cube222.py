@@ -95,6 +95,10 @@ class Cube222:
             cube.draw()
             
     def do_notation(self, notation):
+        for cube in self.cube_array():
+            if cube.is_on_animation():
+                return
+    
         if notation == "u":
             self.do_u()
         elif notation == "d":
@@ -111,32 +115,93 @@ class Cube222:
     def do_u(self):
         for i in self.u_matrix():
             c = self.cube_array()[i-1]
-            c.animated_rotateY(90, False)
+            c.animated_rotateY(-90, False)
+            
+        p1 = self.position_matrix[0]
+        p2 = self.position_matrix[1]
+        p3 = self.position_matrix[2]
+        p4 = self.position_matrix[3]
+        
+        self.position_matrix[0] = p2
+        self.position_matrix[1] = p4
+        self.position_matrix[2] = p1
+        self.position_matrix[3] = p3        
+        
         
     def do_d(self):
         for i in self.d_matrix():
             c = self.cube_array()[i-1]
-            c.animated_rotateY(90, False)
+            c.animated_rotateY(-90, False)
+            
+        p5 = self.position_matrix[4]
+        p6 = self.position_matrix[5]
+        p7 = self.position_matrix[6]
+        p8 = self.position_matrix[7]
+        
+        self.position_matrix[4] = p6
+        self.position_matrix[5] = p8
+        self.position_matrix[6] = p5
+        self.position_matrix[7] = p7
         
     def do_l(self):
         for i in self.l_matrix():
             c = self.cube_array()[i-1]
-            c.animated_rotateX(90, False)
+            c.animated_rotateX(-90, False)
+            
+        p1 = self.position_matrix[0]
+        p3 = self.position_matrix[2]
+        p5 = self.position_matrix[4]
+        p7 = self.position_matrix[6]
+        
+        self.position_matrix[0] = p5
+        self.position_matrix[2] = p1
+        self.position_matrix[4] = p7
+        self.position_matrix[6] = p3
         
     def do_r(self):
         for i in self.r_matrix():
             c = self.cube_array()[i-1]
-            c.animated_rotateX(90, False)
+            c.animated_rotateX(-90, False)
+            
+        p2 = self.position_matrix[1]
+        p4 = self.position_matrix[3]
+        p6 = self.position_matrix[5]
+        p8 = self.position_matrix[7]
+        
+        self.position_matrix[1] = p6
+        self.position_matrix[3] = p2
+        self.position_matrix[5] = p8
+        self.position_matrix[7] = p4
 
     def do_f(self):
         for i in self.f_matrix():
             c = self.cube_array()[i-1]
-            c.animated_rotateZ(90, False)
+            c.animated_rotateZ(-90, False)
+            
+        p1 = self.position_matrix[0]
+        p2 = self.position_matrix[1]
+        p5 = self.position_matrix[4]
+        p6 = self.position_matrix[5]
+        
+        self.position_matrix[0] = p5
+        self.position_matrix[1] = p1
+        self.position_matrix[4] = p6
+        self.position_matrix[5] = p2
     
     def do_b(self):
         for i in self.b_matrix():
             c = self.cube_array()[i-1]
-            c.animated_rotateZ(90, False)
+            c.animated_rotateZ(-90, False)
+            
+        p3 = self.position_matrix[2]
+        p4 = self.position_matrix[3]
+        p7 = self.position_matrix[6]
+        p8 = self.position_matrix[7]
+        
+        self.position_matrix[2] = p7
+        self.position_matrix[3] = p3
+        self.position_matrix[6] = p8
+        self.position_matrix[7] = p4
         
     def animated_rotateY(self, angle, use_self_center):
         pass

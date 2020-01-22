@@ -16,12 +16,13 @@ class Simulation3:
     right_click_on = False
     
     last_mouse_pos = (0, 0)
-    mouse_sensitivity = 50
+    mouse_sensitivity = 10
     
     on_key_w = False
     on_key_a = False
     on_key_s = False
     on_key_d = False
+      
     
     def __init__(self, win_width = 800, win_height = 600):
         self.win_width = win_width
@@ -50,18 +51,18 @@ class Simulation3:
                     pygame.quit()
                     quit()                   
                 elif event.type == pygame.KEYDOWN:
-                    if (event.key == pygame.K_LEFT):
-                        # cube.animated_rotateY(-90, True)
+                    if (event.key == pygame.K_LEFT or event.key == pygame.K_l):
                         cube.do_notation("l")
-                    elif (event.key == pygame.K_RIGHT):
-                        # cube.animated_rotateY(90, True)
+                    elif (event.key == pygame.K_RIGHT or event.key == pygame.K_r):
                         cube.do_notation("r")
-                    elif (event.key == pygame.K_UP):
-                        # cube.animated_rotateX(-90, True)
+                    elif (event.key == pygame.K_UP or event.key == pygame.K_u):
                         cube.do_notation("u")
-                    elif (event.key == pygame.K_DOWN):
-                        # cube.animated_rotateX(90, True)
+                    elif (event.key == pygame.K_DOWN or event.key == pygame.K_d):
                         cube.do_notation("d")
+                    elif (event.key == pygame.K_PAGEUP or event.key == pygame.K_f):
+                        cube.do_notation("f")
+                    elif (event.key == pygame.K_PAGEDOWN or event.key == pygame.K_b):
+                        cube.do_notation("b")
                     elif (event.key == pygame.K_w):
                         self.on_key_w = True
                     elif (event.key == pygame.K_a):
