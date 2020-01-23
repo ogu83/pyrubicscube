@@ -91,21 +91,73 @@ class Cube222:
             cube.draw()
             
     def is_solved(self):
-        m = np.array(self.position_matrix)
-        n_True = np.all(np.diff(np.reshape(m,(-1,2)), axis=1))
-        nn_True = np.all(np.diff(np.reshape(m,(-1,4)), axis=0))
-        nnn_True = np.all(np.diff(np.transpose(np.reshape(m,(2,-1))),axis=1))
-        
-        if (n_True and nn_True and nnn_True):
-            m = np.sum(np.transpose(np.array([np.reshape(m,(-1,4))[0], np.flip(np.reshape(m,(-1,4))[1])])), axis=1)
-            for val in m:
-                if val != 9:
+        return self.is_u_solved() and self.is_d_solved() and self.is_l_solved() and self.is_r_solved() and self.is_f_solved() and self.is_b_solved()
+            
+    def is_u_solved(self):
+        color = None
+        for i in self.u_matrix():
+            c = self.cube_array()[i-1]
+            if color == None:
+                color = c.color_u
+            else:
+                if color != c.color_u:
                     return False
-                else:
-                    return True
-        else:
-            return False
-                        
+        return True
+    
+    def is_d_solved(self):
+        color = None
+        for i in self.d_matrix():
+            c = self.cube_array()[i-1]
+            if color == None:
+                color = c.color_d
+            else:
+                if color != c.color_d:
+                    return False
+        return True
+        
+    def is_l_solved(self):
+        color = None
+        for i in self.l_matrix():
+            c = self.cube_array()[i-1]
+            if color == None:
+                color = c.color_l
+            else:
+                if color != c.color_l:
+                    return False
+        return True
+        
+    def is_r_solved(self):
+        color = None
+        for i in self.r_matrix():
+            c = self.cube_array()[i-1]
+            if color == None:
+                color = c.color_r
+            else:
+                if color != c.color_r:
+                    return False
+        return True
+        
+    def is_f_solved(self):
+        color = None
+        for i in self.f_matrix():
+            c = self.cube_array()[i-1]
+            if color == None:
+                color = c.color_f
+            else:
+                if color != c.color_f:
+                    return False
+        return True
+        
+    def is_b_solved(self):
+        color = None
+        for i in self.b_matrix():
+            c = self.cube_array()[i-1]
+            if color == None:
+                color = c.color_b
+            else:
+                if color != c.color_b:
+                    return False
+        return True
             
     def do_notation(self, notation):
         for cube in self.cube_array():
