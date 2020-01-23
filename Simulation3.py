@@ -22,11 +22,23 @@ class Simulation3:
     on_key_a = False
     on_key_s = False
     on_key_d = False
-      
-    
+          
     def __init__(self, win_width = 800, win_height = 600):
         self.win_width = win_width
         self.win_height = win_height
+        
+    def drawText(self, x=0, y=0, z=0, text="Some text", font_size = 64):
+        position = (x, y, z)
+        # font = pygame.font.Font(None, font_size)
+        all_fonts = pygame.font.get_fonts()
+        first_console_font = list(filter(lambda f: "console" in f, all_fonts))
+        if len(first_console_font)>0:
+            first_console_font = first_console_font[0]
+        font = pygame.font.SysFont(first_console_font, font_size)
+        textSurface = font.render(text, True, (255,255,255,255), (0,0,0,0))
+        textData = pygame.image.tostring(textSurface, "RGBA", True)
+        glRasterPos3d(*position)
+        glDrawPixels(textSurface.get_width(), textSurface.get_height(), GL_RGBA, GL_UNSIGNED_BYTE, textData)
 
     def run(self):
         pygame.init()
@@ -62,7 +74,9 @@ class Simulation3:
                     elif (event.key == pygame.K_PAGEUP or event.key == pygame.K_f):
                         cube.do_notation("f")
                     elif (event.key == pygame.K_PAGEDOWN or event.key == pygame.K_b):
-                        cube.do_notation("b")
+                        cube.do_notation("b")                        
+                    elif (event.key == pygame.K_SPACE):
+                        print(cube.position_matrix_str())
                     elif (event.key == pygame.K_w):
                         self.on_key_w = True
                     elif (event.key == pygame.K_a):
@@ -113,41 +127,14 @@ class Simulation3:
             if (self.on_key_a):
                 glTranslatef(0, 1 / self.mouse_sensitivity, 0)
                                             
-            glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
+            glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)            
             
-            # # Generate a texture
-            # img = pygame.font.Font(None, 15).render("Hello", True, (255, 255, 255))
-            # w, h = img.get_size()
-            # texture = glGenTextures(1)
-            # glPixelStorei(GL_UNPACK_ALIGNMENT, 1)
-            # glBindTexture(GL_TEXTURE_2D, texture)
-            # glTexParameter(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
-            # glTexParameter(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
-            # data = pygame.image.tostring(img, "RGBA", 1)
-            # glTexImage2D(GL_TEXTURE_2D, 0, 4, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data)
+            self.drawText(10, 0, -15, cube.position_matrix_str(), 14)
             
-            # # glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-
-            # # Display texture
-            # glBindTexture(GL_TEXTURE_2D, texture)
-            # glMatrixMode(GL_PROJECTION)
-            # # glLoadIdentity()
-            # # glTranslate(-1, -1, 0)
-            # # glScale(2 / 600, 2 / 400, 1)
-            # glEnable(GL_BLEND)
-            # glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-            # glEnable(GL_TEXTURE_2D)
-            # #glDisable(GL_DEPTH_TEST)
-            # glDisable(GL_CULL_FACE)
-            # glDisable(GL_LIGHTING)
-            # glBegin(GL_QUADS)
-            # x0, y0 = -5, 14
-            # w, h = img.get_size()
-            # for dx, dy in [(0, 0), (0, 1), (1, 1), (1, 0)]:
-                # glVertex(x0 + dx * w, y0 + dy * h, 0)
-                # glTexCoord(dy, 1 - dx)
-            # glEnd()
-            # glMatrixMode(GL_MODELVIEW)
+            solved_text = "Scrambled"
+            if cube.is_solved():
+                solved_text = "Solved"
+            self.drawText(10, 0, -10, solved_text, 14)
                         
             grid.draw()
             cube.draw()

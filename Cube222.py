@@ -42,7 +42,7 @@ class Cube8(Cube3D):
 
 
 class Cube222:
-   
+    
     def __init__(self, size=4):
         self.position_matrix = [1, 2, 3, 4, 5, 6, 7, 8]
         self.Cube1 = Cube1(size / 2)
@@ -80,10 +80,32 @@ class Cube222:
     def b_matrix(self):
         position_matrix = self.position_matrix
         return [position_matrix[2], position_matrix[3], position_matrix[6], position_matrix[7]]
+        
+    def position_matrix_str(self):
+        retval = "CubeMatrix:"
+        retval += ("".join(str(self.position_matrix))) 
+        return retval
 
     def draw(self):
         for cube in self.cube_array():
             cube.draw()
+            
+    def is_solved(self):
+        m = np.array(self.position_matrix)
+        n_True = np.all(np.diff(np.reshape(m,(-1,2)), axis=1))
+        nn_True = np.all(np.diff(np.reshape(m,(-1,4)), axis=0))
+        nnn_True = np.all(np.diff(np.transpose(np.reshape(m,(2,-1))),axis=1))
+        
+        if (n_True and nn_True and nnn_True):
+            m = np.sum(np.transpose(np.array([np.reshape(m,(-1,4))[0], np.flip(np.reshape(m,(-1,4))[1])])), axis=1)
+            for val in m:
+                if val != 9:
+                    return False
+                else:
+                    return True
+        else:
+            return False
+                        
             
     def do_notation(self, notation):
         for cube in self.cube_array():
