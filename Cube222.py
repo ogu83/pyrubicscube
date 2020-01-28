@@ -1,6 +1,25 @@
 from OpenGL_Geometry import *
 from threading import Timer
 
+class SNode():
+    def __init__(self, from_matrix, to_matrix, notation, distance):
+        self.from_matrix = from_matrix
+        self.to_matrix = to_matrix
+        self.notation = notation
+        self.distance = distance
+
+    def __str__(self):
+        return f'{str(self.from_matrix)}|{self.notation}|{self.to_matrix}|{self.distance}'
+
+    def inverse(self):
+        notation = self.notation
+        if (len(notation) > 1):
+            notation = notation[0]
+        else: 
+            notation = notation + "i"
+
+        return SNode(self.to_matrix, self.from_matrix, notation, self.distance)
+
 class Cube1(Cube3D):
     def __init__(self, size):
         super().__init__(size, YELLOW, BLACK, BLUE, BLACK, ORANGE, BLACK)
@@ -46,6 +65,7 @@ class Cube222:
     
     def __init__(self, size=4):
         self.position_matrix = [1, 2, 3, 4, 5, 6, 7, 8]
+        self.notation_history = []
         self.Cube1 = Cube1(size / 2)
         self.Cube2 = Cube2(size / 2)
         self.Cube3 = Cube3(size / 2)
@@ -101,7 +121,7 @@ class Cube222:
 
         return False
             
-    def do_notation(self, notation):
+    def do_notation(self, notation, historyOff = False):
         if self.is_on_animation():
             return
     
@@ -129,191 +149,209 @@ class Cube222:
             self.do_b()
         elif notation == "bi":
             self.do_bi()
+
+        if (not historyOff):
+            self.notation_history.append(notation);
+
+    def notation_history_str(self):
+        return ' '.join(self.notation_history);
+
+    @staticmethod
+    def apply_action(matrix, notation):
+        if notation == "u":
+            p1 = matrix[0]
+            p2 = matrix[1]
+            p3 = matrix[2]
+            p4 = matrix[3]            
+            matrix[0] = p2
+            matrix[1] = p4
+            matrix[2] = p1
+            matrix[3] = p3                    
+        elif notation == "ui":
+            p1 = matrix[0]
+            p2 = matrix[1]
+            p3 = matrix[2]
+            p4 = matrix[3]
+            matrix[0] = p3
+            matrix[1] = p1
+            matrix[2] = p4
+            matrix[3] = p2
+        elif notation == "d":
+            p5 = matrix[4]
+            p6 = matrix[5]
+            p7 = matrix[6]
+            p8 = matrix[7]            
+            matrix[4] = p6
+            matrix[5] = p8
+            matrix[6] = p5
+            matrix[7] = p7
+        elif notation == "di":
+            p5 = matrix[4]
+            p6 = matrix[5]
+            p7 = matrix[6]
+            p8 = matrix[7]            
+            matrix[4] = p7
+            matrix[5] = p5
+            matrix[6] = p8
+            matrix[7] = p6
+        elif notation == "l":
+            p1 = matrix[0]
+            p3 = matrix[2]
+            p5 = matrix[4]
+            p7 = matrix[6]            
+            matrix[0] = p5
+            matrix[2] = p1
+            matrix[4] = p7
+            matrix[6] = p3
+        elif notation == "li":
+            p1 = matrix[0]
+            p3 = matrix[2]
+            p5 = matrix[4]
+            p7 = matrix[6]        
+            matrix[0] = p3
+            matrix[2] = p7
+            matrix[4] = p1
+            matrix[6] = p5
+        elif notation == "r":
+            p2 = matrix[1]
+            p4 = matrix[3]
+            p6 = matrix[5]
+            p8 = matrix[7]            
+            matrix[1] = p6
+            matrix[3] = p2
+            matrix[5] = p8
+            matrix[7] = p4
+        elif notation == "ri":
+            p2 = matrix[1]
+            p4 = matrix[3]
+            p6 = matrix[5]
+            p8 = matrix[7]            
+            matrix[1] = p4
+            matrix[3] = p8
+            matrix[5] = p2
+            matrix[7] = p6
+        elif notation == "f":
+            p1 = matrix[0]
+            p2 = matrix[1]
+            p5 = matrix[4]
+            p6 = matrix[5]            
+            matrix[0] = p5
+            matrix[1] = p1
+            matrix[4] = p6
+            matrix[5] = p2
+        elif notation == "fi":
+            p1 = matrix[0]
+            p2 = matrix[1]
+            p5 = matrix[4]
+            p6 = matrix[5]            
+            matrix[0] = p2
+            matrix[1] = p6
+            matrix[4] = p1
+            matrix[5] = p5
+        elif notation == "b":
+            p3 = matrix[2]
+            p4 = matrix[3]
+            p7 = matrix[6]
+            p8 = matrix[7]            
+            matrix[2] = p7
+            matrix[3] = p3
+            matrix[6] = p8
+            matrix[7] = p4
+        elif notation == "bi":
+            p3 = matrix[2]
+            p4 = matrix[3]
+            p7 = matrix[6]
+            p8 = matrix[7]            
+            matrix[2] = p4
+            matrix[3] = p8
+            matrix[6] = p3
+            matrix[7] = p7
+
+        return matrix
     
     def do_ui(self):
         for i in self.u_matrix():
             c = self.cube_array()[i-1]
             c.animated_rotateY(90, False)
-            
-        p1 = self.position_matrix[0]
-        p2 = self.position_matrix[1]
-        p3 = self.position_matrix[2]
-        p4 = self.position_matrix[3]
         
-        self.position_matrix[0] = p3
-        self.position_matrix[1] = p1
-        self.position_matrix[2] = p4
-        self.position_matrix[3] = p2
+        Cube222.apply_action(self.position_matrix,"ui")        
 
     def do_u(self):
         for i in self.u_matrix():
             c = self.cube_array()[i-1]
             c.animated_rotateY(-90, False)
-            
-        p1 = self.position_matrix[0]
-        p2 = self.position_matrix[1]
-        p3 = self.position_matrix[2]
-        p4 = self.position_matrix[3]
-        
-        self.position_matrix[0] = p2
-        self.position_matrix[1] = p4
-        self.position_matrix[2] = p1
-        self.position_matrix[3] = p3
-                
 
+        Cube222.apply_action(self.position_matrix,"u")        
+                
     def do_di(self):
         for i in self.d_matrix():
             c = self.cube_array()[i-1]
             c.animated_rotateY(90, False)
-            
-        p5 = self.position_matrix[4]
-        p6 = self.position_matrix[5]
-        p7 = self.position_matrix[6]
-        p8 = self.position_matrix[7]
         
-        self.position_matrix[4] = p7
-        self.position_matrix[5] = p5
-        self.position_matrix[6] = p8
-        self.position_matrix[7] = p6
+        Cube222.apply_action(self.position_matrix,"di")                    
 
     def do_d(self):
         for i in self.d_matrix():
             c = self.cube_array()[i-1]
             c.animated_rotateY(-90, False)
-            
-        p5 = self.position_matrix[4]
-        p6 = self.position_matrix[5]
-        p7 = self.position_matrix[6]
-        p8 = self.position_matrix[7]
-        
-        self.position_matrix[4] = p6
-        self.position_matrix[5] = p8
-        self.position_matrix[6] = p5
-        self.position_matrix[7] = p7
-        
 
+        Cube222.apply_action(self.position_matrix,"d")                    
+        
     def do_li(self):
         for i in self.l_matrix():
             c = self.cube_array()[i-1]
             c.animated_rotateX(90, False)
-            
-        p1 = self.position_matrix[0]
-        p3 = self.position_matrix[2]
-        p5 = self.position_matrix[4]
-        p7 = self.position_matrix[6]
-        
-        self.position_matrix[0] = p3
-        self.position_matrix[2] = p7
-        self.position_matrix[4] = p1
-        self.position_matrix[6] = p5
+
+        Cube222.apply_action(self.position_matrix,"li")                    
 
     def do_l(self):
         for i in self.l_matrix():
             c = self.cube_array()[i-1]
             c.animated_rotateX(-90, False)
-            
-        p1 = self.position_matrix[0]
-        p3 = self.position_matrix[2]
-        p5 = self.position_matrix[4]
-        p7 = self.position_matrix[6]
-        
-        self.position_matrix[0] = p5
-        self.position_matrix[2] = p1
-        self.position_matrix[4] = p7
-        self.position_matrix[6] = p3
-        
 
+        Cube222.apply_action(self.position_matrix,"l")                
+        
     def do_ri(self):
         for i in self.r_matrix():
             c = self.cube_array()[i-1]
             c.animated_rotateX(90, False)
-            
-        p2 = self.position_matrix[1]
-        p4 = self.position_matrix[3]
-        p6 = self.position_matrix[5]
-        p8 = self.position_matrix[7]
-        
-        self.position_matrix[1] = p4
-        self.position_matrix[3] = p8
-        self.position_matrix[5] = p2
-        self.position_matrix[7] = p6
+
+        Cube222.apply_action(self.position_matrix,"ri")                
 
     def do_r(self):
         for i in self.r_matrix():
             c = self.cube_array()[i-1]
             c.animated_rotateX(-90, False)
-            
-        p2 = self.position_matrix[1]
-        p4 = self.position_matrix[3]
-        p6 = self.position_matrix[5]
-        p8 = self.position_matrix[7]
         
-        self.position_matrix[1] = p6
-        self.position_matrix[3] = p2
-        self.position_matrix[5] = p8
-        self.position_matrix[7] = p4
-
+        Cube222.apply_action(self.position_matrix,"r")                    
 
     def do_fi(self):
         for i in self.f_matrix():
             c = self.cube_array()[i-1]
             c.animated_rotateZ(90, False)
-            
-        p1 = self.position_matrix[0]
-        p2 = self.position_matrix[1]
-        p5 = self.position_matrix[4]
-        p6 = self.position_matrix[5]
-        
-        self.position_matrix[0] = p2
-        self.position_matrix[1] = p6
-        self.position_matrix[4] = p1
-        self.position_matrix[5] = p5
+
+        Cube222.apply_action(self.position_matrix,"fi")
 
     def do_f(self):
         for i in self.f_matrix():
             c = self.cube_array()[i-1]
             c.animated_rotateZ(-90, False)
-            
-        p1 = self.position_matrix[0]
-        p2 = self.position_matrix[1]
-        p5 = self.position_matrix[4]
-        p6 = self.position_matrix[5]
-        
-        self.position_matrix[0] = p5
-        self.position_matrix[1] = p1
-        self.position_matrix[4] = p6
-        self.position_matrix[5] = p2
-    
 
+        Cube222.apply_action(self.position_matrix,"f")
+    
     def do_bi(self):
         for i in self.b_matrix():
             c = self.cube_array()[i-1]
             c.animated_rotateZ(90, False)
-            
-        p3 = self.position_matrix[2]
-        p4 = self.position_matrix[3]
-        p7 = self.position_matrix[6]
-        p8 = self.position_matrix[7]
-        
-        self.position_matrix[2] = p4
-        self.position_matrix[3] = p8
-        self.position_matrix[6] = p3
-        self.position_matrix[7] = p7
+
+        Cube222.apply_action(self.position_matrix,"bi")
 
     def do_b(self):
         for i in self.b_matrix():
             c = self.cube_array()[i-1]
             c.animated_rotateZ(-90, False)
-            
-        p3 = self.position_matrix[2]
-        p4 = self.position_matrix[3]
-        p7 = self.position_matrix[6]
-        p8 = self.position_matrix[7]
         
-        self.position_matrix[2] = p7
-        self.position_matrix[3] = p3
-        self.position_matrix[6] = p8
-        self.position_matrix[7] = p4    
+        Cube222.apply_action(self.position_matrix,"b")
 
     def notations(self):
         def addi(elem):
@@ -332,7 +370,21 @@ class Cube222:
             self.do_notation(notation)
         
         for i in range(moves):
-            Timer(speed * i, do_n).start()     
+            Timer(speed * i, do_n).start()
+
+    def rollback_history(self, speed=0.2):
+        # notations = self.notations()
+        # notation_history = self.notation_history
+        m = 0
+        while len(self.notation_history)>0:
+            n = self.notation_history.pop()
+            if (len(n) > 1):
+                n = n[0]
+            else: 
+                n = n + "i"
+
+            Timer(speed * m, self.do_notation, [n, True]).start()
+            m += 1
             
     def solve(self, max_iterations = 20):
         pass
@@ -341,5 +393,4 @@ class Cube222:
         pass
         
     def animated_rotateX(self, angle, use_self_center):
-        pass
-                
+        pass                
