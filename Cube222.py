@@ -166,17 +166,44 @@ class Cube222:
     
         if notation == "u":
             self.do_u()
+        elif notation == "ui":
+            self.do_ui()
         elif notation == "d":
             self.do_d()
+        elif notation == "di":
+            self.do_di()
         elif notation == "l":
             self.do_l()
+        elif notation == "li":
+            self.do_li()
         elif notation == "r":
             self.do_r()
+        elif notation == "ri":
+            self.do_ri()
         elif notation == "f":
             self.do_f()
+        elif notation == "fi":
+            self.do_fi()
         elif notation == "b":
             self.do_b()
+        elif notation == "bi":
+            self.do_bi()
+    
+    def do_ui(self):
+        for i in self.u_matrix():
+            c = self.cube_array()[i-1]
+            c.animated_rotateY(90, False)
+            
+        p1 = self.position_matrix[0]
+        p2 = self.position_matrix[1]
+        p3 = self.position_matrix[2]
+        p4 = self.position_matrix[3]
         
+        self.position_matrix[0] = p3
+        self.position_matrix[1] = p1
+        self.position_matrix[2] = p4
+        self.position_matrix[3] = p2
+
     def do_u(self):
         for i in self.u_matrix():
             c = self.cube_array()[i-1]
@@ -190,9 +217,24 @@ class Cube222:
         self.position_matrix[0] = p2
         self.position_matrix[1] = p4
         self.position_matrix[2] = p1
-        self.position_matrix[3] = p3        
+        self.position_matrix[3] = p3
+                
+
+    def do_di(self):
+        for i in self.d_matrix():
+            c = self.cube_array()[i-1]
+            c.animated_rotateY(90, False)
+            
+        p5 = self.position_matrix[4]
+        p6 = self.position_matrix[5]
+        p7 = self.position_matrix[6]
+        p8 = self.position_matrix[7]
         
-        
+        self.position_matrix[4] = p7
+        self.position_matrix[5] = p5
+        self.position_matrix[6] = p8
+        self.position_matrix[7] = p6
+
     def do_d(self):
         for i in self.d_matrix():
             c = self.cube_array()[i-1]
@@ -208,6 +250,22 @@ class Cube222:
         self.position_matrix[6] = p5
         self.position_matrix[7] = p7
         
+
+    def do_li(self):
+        for i in self.l_matrix():
+            c = self.cube_array()[i-1]
+            c.animated_rotateX(90, False)
+            
+        p1 = self.position_matrix[0]
+        p3 = self.position_matrix[2]
+        p5 = self.position_matrix[4]
+        p7 = self.position_matrix[6]
+        
+        self.position_matrix[0] = p3
+        self.position_matrix[2] = p7
+        self.position_matrix[4] = p1
+        self.position_matrix[6] = p5
+
     def do_l(self):
         for i in self.l_matrix():
             c = self.cube_array()[i-1]
@@ -223,6 +281,22 @@ class Cube222:
         self.position_matrix[4] = p7
         self.position_matrix[6] = p3
         
+
+    def do_ri(self):
+        for i in self.r_matrix():
+            c = self.cube_array()[i-1]
+            c.animated_rotateX(90, False)
+            
+        p2 = self.position_matrix[1]
+        p4 = self.position_matrix[3]
+        p6 = self.position_matrix[5]
+        p8 = self.position_matrix[7]
+        
+        self.position_matrix[1] = p4
+        self.position_matrix[3] = p8
+        self.position_matrix[5] = p2
+        self.position_matrix[7] = p6
+
     def do_r(self):
         for i in self.r_matrix():
             c = self.cube_array()[i-1]
@@ -237,6 +311,22 @@ class Cube222:
         self.position_matrix[3] = p2
         self.position_matrix[5] = p8
         self.position_matrix[7] = p4
+
+
+    def do_fi(self):
+        for i in self.f_matrix():
+            c = self.cube_array()[i-1]
+            c.animated_rotateZ(90, False)
+            
+        p1 = self.position_matrix[0]
+        p2 = self.position_matrix[1]
+        p5 = self.position_matrix[4]
+        p6 = self.position_matrix[5]
+        
+        self.position_matrix[0] = p2
+        self.position_matrix[1] = p6
+        self.position_matrix[4] = p1
+        self.position_matrix[5] = p5
 
     def do_f(self):
         for i in self.f_matrix():
@@ -253,6 +343,22 @@ class Cube222:
         self.position_matrix[4] = p6
         self.position_matrix[5] = p2
     
+
+    def do_bi(self):
+        for i in self.b_matrix():
+            c = self.cube_array()[i-1]
+            c.animated_rotateZ(90, False)
+            
+        p3 = self.position_matrix[2]
+        p4 = self.position_matrix[3]
+        p7 = self.position_matrix[6]
+        p8 = self.position_matrix[7]
+        
+        self.position_matrix[2] = p4
+        self.position_matrix[3] = p8
+        self.position_matrix[6] = p3
+        self.position_matrix[7] = p7
+
     def do_b(self):
         for i in self.b_matrix():
             c = self.cube_array()[i-1]
@@ -268,6 +374,7 @@ class Cube222:
         self.position_matrix[6] = p8
         self.position_matrix[7] = p4
         
+
     def animated_rotateY(self, angle, use_self_center):
         pass
         

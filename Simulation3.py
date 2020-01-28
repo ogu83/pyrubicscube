@@ -40,6 +40,9 @@ class Simulation3:
         glRasterPos3d(*position)
         glDrawPixels(textSurface.get_width(), textSurface.get_height(), GL_RGBA, GL_UNSIGNED_BYTE, textData)
 
+    def isShiftPressed(self):
+        return (pygame.key.get_mods() & pygame.KMOD_SHIFT)
+
     def run(self):
         pygame.init()
         
@@ -64,17 +67,35 @@ class Simulation3:
                     quit()                   
                 elif event.type == pygame.KEYDOWN:
                     if (event.key == pygame.K_LEFT or event.key == pygame.K_l):
-                        cube.do_notation("l")
+                        if self.isShiftPressed():
+                            cube.do_notation("li")
+                        else:
+                            cube.do_notation("l")
                     elif (event.key == pygame.K_RIGHT or event.key == pygame.K_r):
-                        cube.do_notation("r")
+                        if self.isShiftPressed():
+                            cube.do_notation("ri")
+                        else:
+                            cube.do_notation("r")
                     elif (event.key == pygame.K_UP or event.key == pygame.K_u):
-                        cube.do_notation("u")
+                        if self.isShiftPressed():
+                            cube.do_notation("ui")
+                        else:
+                            cube.do_notation("u")
                     elif (event.key == pygame.K_DOWN or event.key == pygame.K_d):
-                        cube.do_notation("d")
+                        if self.isShiftPressed():
+                            cube.do_notation("di")
+                        else:
+                            cube.do_notation("d")
                     elif (event.key == pygame.K_PAGEUP or event.key == pygame.K_f):
-                        cube.do_notation("f")
+                        if self.isShiftPressed():
+                            cube.do_notation("fi")
+                        else:
+                            cube.do_notation("f")
                     elif (event.key == pygame.K_PAGEDOWN or event.key == pygame.K_b):
-                        cube.do_notation("b")                        
+                        if self.isShiftPressed():
+                            cube.do_notation("bi")
+                        else:
+                            cube.do_notation("b")
                     elif (event.key == pygame.K_SPACE):
                         print(cube.position_matrix_str())
                     elif (event.key == pygame.K_w):

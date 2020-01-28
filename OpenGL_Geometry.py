@@ -201,7 +201,7 @@ class Cube3D:
             self.rotateY(-speed, self.angle_y[2])
             
         if (self.angle_z[0] < self.angle_z[1]):
-            self.angle_y[0] += speed
+            self.angle_z[0] += speed
             self.rotateZ(speed, self.angle_z[2])
         elif (self.angle_z[0] > self.angle_z[1]):
             self.angle_z[0] -= speed
@@ -222,7 +222,7 @@ class Cube3D:
             self.angle_y[1] += angle
             self.angle_y[2] = use_self_center
         
-    def animated_rotateZ(self,angle, use_self_center):
+    def animated_rotateZ(self, angle, use_self_center):
         if (not self.is_on_animation()):
             self.angle_z[1] += angle
             self.angle_z[2] = use_self_center
