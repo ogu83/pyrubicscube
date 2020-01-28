@@ -1,4 +1,5 @@
 from OpenGL_Geometry import *
+from threading import Timer
 
 class Cube1(Cube3D):
     def __init__(self, size):
@@ -86,83 +87,23 @@ class Cube222:
         retval += ("".join(str(self.position_matrix))) 
         return retval
 
-    def draw(self):
+    def draw(self, animation_speed=15):
         for cube in self.cube_array():
-            cube.draw()
+            cube.draw(animation_speed)
             
     def is_solved(self):
-        return self.is_u_solved() and self.is_d_solved() and self.is_l_solved() and self.is_r_solved() and self.is_f_solved() and self.is_b_solved()
-            
-    def is_u_solved(self):
-        color = None
-        for i in self.u_matrix():
-            c = self.cube_array()[i-1]
-            if color == None:
-                color = c.color_u
-            else:
-                if color != c.color_u:
-                    return False
-        return True
-    
-    def is_d_solved(self):
-        color = None
-        for i in self.d_matrix():
-            c = self.cube_array()[i-1]
-            if color == None:
-                color = c.color_d
-            else:
-                if color != c.color_d:
-                    return False
-        return True
-        
-    def is_l_solved(self):
-        color = None
-        for i in self.l_matrix():
-            c = self.cube_array()[i-1]
-            if color == None:
-                color = c.color_l
-            else:
-                if color != c.color_l:
-                    return False
-        return True
-        
-    def is_r_solved(self):
-        color = None
-        for i in self.r_matrix():
-            c = self.cube_array()[i-1]
-            if color == None:
-                color = c.color_r
-            else:
-                if color != c.color_r:
-                    return False
-        return True
-        
-    def is_f_solved(self):
-        color = None
-        for i in self.f_matrix():
-            c = self.cube_array()[i-1]
-            if color == None:
-                color = c.color_f
-            else:
-                if color != c.color_f:
-                    return False
-        return True
-        
-    def is_b_solved(self):
-        color = None
-        for i in self.b_matrix():
-            c = self.cube_array()[i-1]
-            if color == None:
-                color = c.color_b
-            else:
-                if color != c.color_b:
-                    return False
-        return True
-            
-    def do_notation(self, notation):
+        return self.position_matrix == [1, 2, 3, 4, 5, 6, 7, 8]
+
+    def is_on_animation(self):
         for cube in self.cube_array():
             if cube.is_on_animation():
-                return
+                return True
+
+        return False
+            
+    def do_notation(self, notation):
+        if self.is_on_animation():
+            return
     
         if notation == "u":
             self.do_u()
@@ -372,9 +313,30 @@ class Cube222:
         self.position_matrix[2] = p7
         self.position_matrix[3] = p3
         self.position_matrix[6] = p8
-        self.position_matrix[7] = p4
-        
+        self.position_matrix[7] = p4    
 
+    def notations(self):
+        def addi(elem):
+            return elem + 'i'
+
+        notations = ['u','d','f','b','l','r']
+        rn = list(map(addi, notations))
+        notations += rn
+        return notations
+
+    def scramble(self, moves = 20, speed=0.2):        
+        notations = self.notations()
+        
+        def do_n():
+            notation = notations[random.randint(0, len(notations)-1)]
+            self.do_notation(notation)
+        
+        for i in range(moves):
+            Timer(speed * i, do_n).start()     
+            
+    def solve(self, max_iterations = 20):
+        pass
+                
     def animated_rotateY(self, angle, use_self_center):
         pass
         

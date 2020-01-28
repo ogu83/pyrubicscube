@@ -95,8 +95,8 @@ class Cube3D:
             self.color_d, #WHITE            
         ]
         
-    def draw(self):
-        self.do_animations()
+    def draw(self, animation_speed=15):
+        self.do_animations(animation_speed)
         
         glBegin(GL_QUADS)
         color_index = 0

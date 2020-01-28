@@ -10,6 +10,8 @@ from Cube222 import *
 LEFT = 1
 RIGHT = 3
 
+PY_WAIT = 20
+
 class Simulation3:   
    
     left_click_on = False
@@ -50,7 +52,7 @@ class Simulation3:
         pygame.display.set_mode(display, DOUBLEBUF|OPENGL)
         glEnable(GL_DEPTH_TEST)
 
-        gluPerspective(60, (self.win_width / self.win_height), 0.1, 100)
+        gluPerspective(60, (self.win_width / self.win_height), 0.1, 200)
         glRotatef(45, 0.5, -0.5, -0.125)
         glTranslatef(-25, -25, -25)
         
@@ -96,6 +98,12 @@ class Simulation3:
                             cube.do_notation("bi")
                         else:
                             cube.do_notation("b")
+                    elif (event.key == pygame.K_F1):
+                        if self.isShiftPressed():
+                            cube.solve()
+                        else:
+                            cube.scramble(20, PY_WAIT/100)
+                    
                     elif (event.key == pygame.K_SPACE):
                         print(cube.position_matrix_str())
                     elif (event.key == pygame.K_w):
@@ -156,9 +164,11 @@ class Simulation3:
             if cube.is_solved():
                 solved_text = "Solved"
             self.drawText(10, 0, -10, solved_text, 14)
+
+            self.drawText(-100, 0, -50, "F1:Scramble | ShiftF1:Solve", 12);
                         
             grid.draw()
-            cube.draw()
+            cube.draw(PY_WAIT/2*3)
             
             pygame.display.flip()
-            pygame.time.wait(20)
+            pygame.time.wait(PY_WAIT)
