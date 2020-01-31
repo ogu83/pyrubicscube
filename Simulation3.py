@@ -10,7 +10,7 @@ from Cube222 import *
 LEFT = 1
 RIGHT = 3
 PY_WAIT = 30
-FONT_SIZE = 22
+FONT_SIZE = 14
 
 class Simulation3:   
    
@@ -103,6 +103,8 @@ class Simulation3:
                             cube.rollback_history(PY_WAIT/100)
                         else:
                             cube.scramble(20, PY_WAIT/100)
+                    elif (event.key == pygame.K_F2):
+                        cube.learn()
                     
                     elif (event.key == pygame.K_SPACE):
                         print(cube.position_matrix_str())
@@ -165,7 +167,7 @@ class Simulation3:
                 solved_text = "Solved"
             self.drawText(10, 0, -10, solved_text, FONT_SIZE)
 
-            self.drawText(-170, 0, -70, "F1:Scramble | ShiftF1:Solve", FONT_SIZE);
+            self.drawText(-170, 0, -70, "F1:Scramble | ShiftF1:Rollback | F2:Learn", FONT_SIZE);
             self.drawText(-150, 0, -50, cube.notation_history_str(), FONT_SIZE);
                         
             grid.draw()

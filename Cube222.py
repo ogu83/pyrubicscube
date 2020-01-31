@@ -1,5 +1,7 @@
 from OpenGL_Geometry import *
 from threading import Timer
+from HelperFunctions import *
+import pickle as pk
 
 class SNode():
     def __init__(self, from_matrix, to_matrix, notation, distance):
@@ -8,8 +10,23 @@ class SNode():
         self.notation = notation
         self.distance = distance
 
+    @staticmethod
+    def matrix_hash(matrix):
+        return int(''.join(map(str,matrix)))
+
+    @property
+    def from_hash(self):
+        return SNode.matrix_hash(self.from_matrix)
+
+    @property
+    def to_hash(self):
+        return SNode.matrix_hash(self.to_matrix)
+
     def __str__(self):
-        return f'{str(self.from_matrix)}|{self.notation}|{self.to_matrix}|{self.distance}'
+        return self.__repr__()
+
+    def __repr__(self):
+        return f'{str(self.from_hash)}|{self.notation}|{self.to_hash}|{self.distance}'
 
     def inverse(self):
         notation = self.notation
@@ -66,6 +83,7 @@ class Cube222:
     def __init__(self, size=4):
         self.position_matrix = [1, 2, 3, 4, 5, 6, 7, 8]
         self.notation_history = []
+        self.nodes = []        
         self.Cube1 = Cube1(size / 2)
         self.Cube2 = Cube2(size / 2)
         self.Cube3 = Cube3(size / 2)
@@ -274,56 +292,56 @@ class Cube222:
             c = self.cube_array()[i-1]
             c.animated_rotateY(90, False)
         
-        Cube222.apply_action(self.position_matrix,"ui")        
+        Cube222.apply_action(self.position_matrix,"ui")
 
     def do_u(self):
         for i in self.u_matrix():
             c = self.cube_array()[i-1]
             c.animated_rotateY(-90, False)
 
-        Cube222.apply_action(self.position_matrix,"u")        
+        Cube222.apply_action(self.position_matrix,"u")
                 
     def do_di(self):
         for i in self.d_matrix():
             c = self.cube_array()[i-1]
             c.animated_rotateY(90, False)
         
-        Cube222.apply_action(self.position_matrix,"di")                    
+        Cube222.apply_action(self.position_matrix,"di")
 
     def do_d(self):
         for i in self.d_matrix():
             c = self.cube_array()[i-1]
             c.animated_rotateY(-90, False)
 
-        Cube222.apply_action(self.position_matrix,"d")                    
+        Cube222.apply_action(self.position_matrix,"d")
         
     def do_li(self):
         for i in self.l_matrix():
             c = self.cube_array()[i-1]
             c.animated_rotateX(90, False)
 
-        Cube222.apply_action(self.position_matrix,"li")                    
+        Cube222.apply_action(self.position_matrix,"li")
 
     def do_l(self):
         for i in self.l_matrix():
             c = self.cube_array()[i-1]
             c.animated_rotateX(-90, False)
 
-        Cube222.apply_action(self.position_matrix,"l")                
+        Cube222.apply_action(self.position_matrix,"l")
         
     def do_ri(self):
         for i in self.r_matrix():
             c = self.cube_array()[i-1]
             c.animated_rotateX(90, False)
 
-        Cube222.apply_action(self.position_matrix,"ri")                
+        Cube222.apply_action(self.position_matrix,"ri")
 
     def do_r(self):
         for i in self.r_matrix():
             c = self.cube_array()[i-1]
             c.animated_rotateX(-90, False)
         
-        Cube222.apply_action(self.position_matrix,"r")                    
+        Cube222.apply_action(self.position_matrix,"r")
 
     def do_fi(self):
         for i in self.f_matrix():
@@ -374,17 +392,63 @@ class Cube222:
 
     def rollback_history(self, speed=0.2):
         # notations = self.notations()
-        # notation_history = self.notation_history
-        m = 0
-        while len(self.notation_history)>0:
-            n = self.notation_history.pop()
-            if (len(n) > 1):
-                n = n[0]
-            else: 
-                n = n + "i"
+        # notation_history = self.notation_history        
+        def rollback_history_func(m):
+            if len(self.notation_history) > 0:
+                n = self.notation_history.pop()
+                if (len(n) > 1):
+                    n = n[0]
+                else: 
+                    n = n + "i"
+            
+                self.do_notation(n, True)                
+                Timer(speed * m, rollback_history_func, [1]).start()
+                
+        rollback_history_func(1)
+        
+    def learn(self, sEpoch = 6, eEpoch=7, save_pickle=True, load_pickle=True, file_name="222nodes.pkl"):
+        if not self.is_solved():
+            print('Its not solved, to learn solved cube is needed')
+        notations = self.notations()
 
-            Timer(speed * m, self.do_notation, [n, True]).start()
-            m += 1
+        if load_pickle:
+            try:
+                with open('222nodes.pkl', 'rb') as handle:
+                    self.nodes = pk.load(handle)
+            except:
+                self.nodes = []
+
+        for n in notations:            
+            tm = self.position_matrix.copy()
+            Cube222.apply_action(tm, n)
+            tm_hash = SNode.matrix_hash(tm)
+            allowed_add = not any(filter(lambda node: (tm_hash == node.to_hash) or (tm_hash == node.from_hash), self.nodes))                                    
+            if allowed_add:
+                fm = self.position_matrix.copy()
+                snode = SNode(fm, tm, n, 0)
+                snode = snode.inverse()
+                self.nodes.append(snode)
+
+        for e in range(sEpoch, eEpoch):
+            epoch_nodes = filter(lambda node: (node.distance == e), self.nodes)            
+            for snode in epoch_nodes:                
+                #print(f".", end="", flush=False)                
+                for n in notations:                    
+                    tm = snode.from_matrix.copy()                    
+                    Cube222.apply_action(tm, n)
+                    tm_hash = SNode.matrix_hash(tm)
+                    allowed_add = not any(filter(lambda node: (tm_hash == node.to_hash) or (tm_hash == node.from_hash), self.nodes))                                    
+                    if allowed_add:
+                        fm = snode.from_matrix.copy()
+                        new_snode = SNode(fm, tm, n, snode.distance + 1)                        
+                        new_snode = new_snode.inverse()
+                        self.nodes.append(new_snode)
+                        print(f"Epoch: {e}, Node Count: {len(self.nodes)}, LastNode:{self.nodes[len(self.nodes)-1]}")                                
+                
+                
+        if save_pickle:
+            with open(file_name, 'wb') as handle:
+                pk.dump(self.nodes, handle, protocol=pk.HIGHEST_PROTOCOL)            
             
     def solve(self, max_iterations = 20):
         pass
