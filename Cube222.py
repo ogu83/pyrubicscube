@@ -83,6 +83,7 @@ class Cube222:
     def __init__(self, size=4):
         self.position_matrix = [1, 2, 3, 4, 5, 6, 7, 8]
         self.notation_history = []
+        self.solution_history = []
         self.nodes = []        
         self.Cube1 = Cube1(size / 2)
         self.Cube2 = Cube2(size / 2)
@@ -173,6 +174,9 @@ class Cube222:
 
     def notation_history_str(self):
         return ' '.join(self.notation_history);
+
+    def solution_history_str(self):
+        return ' '.join(self.solution_history);
 
     @staticmethod
     def apply_action(matrix, notation):
@@ -390,9 +394,7 @@ class Cube222:
         for i in range(moves):
             Timer(speed * i, do_n).start()
 
-    def rollback_history(self, speed=0.2):
-        # notations = self.notations()
-        # notation_history = self.notation_history        
+    def rollback_history(self, speed=0.2):               
         def rollback_history_func(m):
             if len(self.notation_history) > 0:
                 n = self.notation_history.pop()
@@ -406,7 +408,7 @@ class Cube222:
                 
         rollback_history_func(1)
         
-    def learn(self, sEpoch = 6, eEpoch=7, save_pickle=True, load_pickle=True, file_name="222nodes.pkl"):
+    def learn(self, sEpoch = 0, eEpoch=6, save_pickle=True, load_pickle=True, file_name="222nodes.pkl"):
         if not self.is_solved():
             print('Its not solved, to learn solved cube is needed')
         notations = self.notations()
@@ -430,7 +432,7 @@ class Cube222:
                 self.nodes.append(snode)
 
         for e in range(sEpoch, eEpoch):
-            epoch_nodes = filter(lambda node: (node.distance == e), self.nodes)            
+            epoch_nodes = filter(lambda node: (node.distance == e), self.nodes)
             for snode in epoch_nodes:                
                 #print(f".", end="", flush=False)                
                 for n in notations:                    
@@ -450,8 +452,43 @@ class Cube222:
             with open(file_name, 'wb') as handle:
                 pk.dump(self.nodes, handle, protocol=pk.HIGHEST_PROTOCOL)            
             
-    def solve(self, max_iterations = 20):
-        pass
+    def solve(self, speed=0.2, load_pickle=True, file_name="222nodes.pkl"):
+        self.solution_history = []
+        if self.is_solved():
+            return
+        
+        notations = self.notations()
+
+        if load_pickle:
+            try:
+                with open('222nodes.pkl', 'rb') as handle:
+                    self.nodes = pk.load(handle)
+            except:
+                self.learn()
+        else:
+            self.learn(load_pickle = False)
+
+        def find_best_notation():
+            pos_hash = SNode.matrix_hash(self.position_matrix) 
+            n = filter(lambda node: (node.from_hash == pos_hash), self.nodes)
+            n = sorted(n, key = lambda node: node.distance)
+            n = first(n)
+            if (not n):
+                n = notations[random.randint(0, len(notations)-1)]
+            else:
+                n = n.notation
+
+            return n
+
+        def solve_func(m):            
+            n = find_best_notation()
+            self.do_notation(n, True)
+            if not self.is_solved():
+                Timer(speed * m, solve_func, [1]).start()
+                self.solution_history.append(n)
+
+        solve_func(1)
+
                 
     def animated_rotateY(self, angle, use_self_center):
         pass
