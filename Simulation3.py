@@ -104,9 +104,9 @@ class Simulation3:
                         else:
                             cube.scramble(20, PY_WAIT/100)
                     elif (event.key == pygame.K_F2):
-                        cube.learn()
+                        cube.dfs()
                     elif (event.key == pygame.K_F3):
-                        cube.solve(PY_WAIT/100)
+                        pass
                     
                     elif (event.key == pygame.K_SPACE):
                         print(cube.position_matrix_str())
@@ -162,15 +162,15 @@ class Simulation3:
                                             
             glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)            
             
-            self.drawText(10, 0, -15, cube.position_matrix_str(), FONT_SIZE)
+            self.drawText(10, 0, -15, "CM: " + cube.position_matrix_str(), FONT_SIZE)
             
             solved_text = "Scrambled"
             if cube.is_solved():
                 solved_text = "Solved"
             self.drawText(10, 0, -10, solved_text, FONT_SIZE)
 
-            self.drawText(-170, 0, -70, "F1:Scramble | ShiftF1:Rollback | F2:Learn | F3:Solve", FONT_SIZE);
-            self.drawText(-150, 0, -50, cube.notation_history_str(), FONT_SIZE);
+            self.drawText(-170, 0, -70, "F1: Scramble | Shift_F1: Rollback | F2: DFS |", FONT_SIZE);
+            self.drawText(-150, 0, -50, "Hs:" + cube.notation_history_str(), FONT_SIZE);
             self.drawText(-130, 0, -40, f"Solution: {cube.solution_history_str()}", FONT_SIZE);
                         
             grid.draw()

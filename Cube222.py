@@ -84,7 +84,7 @@ class Cube222:
         self.position_matrix = [1, 2, 3, 4, 5, 6, 7, 8]
         self.notation_history = []
         self.solution_history = []
-        self.nodes = []        
+        self.nodes = []
         self.Cube1 = Cube1(size / 2)
         self.Cube2 = Cube2(size / 2)
         self.Cube3 = Cube3(size / 2)
@@ -122,16 +122,25 @@ class Cube222:
         return [position_matrix[2], position_matrix[3], position_matrix[6], position_matrix[7]]
         
     def position_matrix_str(self):
-        retval = "CubeMatrix:"
-        retval += ("".join(str(self.position_matrix))) 
-        return retval
+        retval = [SNode.matrix_hash(self.position_matrix)]
+        for cube in self.cube_array():
+            retval.append(SNode.matrix_hash(cube.get_angle_matrix()))
+        retval = SNode.matrix_hash(retval);        
+        return str(retval)
 
     def draw(self, animation_speed=15):
         for cube in self.cube_array():
             cube.draw(animation_speed)
             
     def is_solved(self):
-        return self.position_matrix == [1, 2, 3, 4, 5, 6, 7, 8]
+        first = ""
+        for cube in self.cube_array():
+            if first == "":
+                first = SNode.matrix_hash(cube.get_angle_matrix())
+            elif first != SNode.matrix_hash(cube.get_angle_matrix()):
+                return False
+        return True
+
 
     def is_on_animation(self):
         for cube in self.cube_array():
@@ -170,14 +179,14 @@ class Cube222:
             self.do_bi()
 
         if (not historyOff):
-            self.notation_history.append(notation);
+            self.notation_history.append(notation)
 
     def notation_history_str(self):
-        return ' '.join(self.notation_history) + str(self.Cube1.get_angle_matrix());
+        return ' '.join(self.notation_history)
         
 
     def solution_history_str(self):
-        return ' '.join(self.solution_history);
+        return ' '.join(self.solution_history)
 
     @staticmethod
     def apply_action(matrix, notation):
@@ -385,7 +394,7 @@ class Cube222:
         notations += rn
         return notations
 
-    def scramble(self, moves = 20, speed=0.2):        
+    def scramble(self, moves = 20, speed=0.2):
         notations = self.notations()
         
         def do_n():
@@ -489,6 +498,17 @@ class Cube222:
                 self.solution_history.append(n)
 
         solve_func(1)
+
+    def dfs(self, max_move = 20):
+        self.solution_history = []
+        if self.is_solved():
+            return
+        
+        notations = self.notations()
+
+        
+
+        pass
 
                 
     def animated_rotateY(self, angle, use_self_center):
