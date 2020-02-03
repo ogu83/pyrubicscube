@@ -83,7 +83,10 @@ class Cube3D:
         
         self.angle_x = [0, 0, False]
         self.angle_y = [0, 0, False]
-        self.angle_z = [0, 0, False]        
+        self.angle_z = [0, 0, False]
+        
+    def get_angle_matrix(self):
+        return [self.angle_x[0] % 360 // 90, self.angle_y[0] % 360 // 90, self.angle_z[0] % 360 //90]
         
     def getColorArray(self):
         return [            

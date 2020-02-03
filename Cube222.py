@@ -173,7 +173,8 @@ class Cube222:
             self.notation_history.append(notation);
 
     def notation_history_str(self):
-        return ' '.join(self.notation_history);
+        return ' '.join(self.notation_history) + str(self.Cube1.get_angle_matrix());
+        
 
     def solution_history_str(self):
         return ' '.join(self.solution_history);
