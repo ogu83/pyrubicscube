@@ -499,16 +499,21 @@ class Cube222:
 
         solve_func(1)
 
-    def dfs(self, max_move = 20):
+    def dfs(self, depth = 2):
         self.solution_history = []
         if self.is_solved():
             return
         
         notations = self.notations()
+        stack = []
+        stack.extend(notations)
+        for d in range(depth):
+            for s in stack:
+                for n in notations:
+                    stack.append(s + n)
 
-        
+        print(stack)
 
-        pass
 
                 
     def animated_rotateY(self, angle, use_self_center):
