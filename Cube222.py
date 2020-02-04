@@ -80,19 +80,66 @@ class Cube8(Cube3D):
 
 class Cube222:
     
-    def __init__(self, size=4):
-        self.position_matrix = [1, 2, 3, 4, 5, 6, 7, 8]
-        self.notation_history = []
-        self.solution_history = []
-        self.nodes = []
-        self.Cube1 = Cube1(size / 2)
-        self.Cube2 = Cube2(size / 2)
-        self.Cube3 = Cube3(size / 2)
-        self.Cube4 = Cube4(size / 2)
-        self.Cube5 = Cube5(size / 2)
-        self.Cube6 = Cube6(size / 2)
-        self.Cube7 = Cube7(size / 2)
-        self.Cube8 = Cube8(size / 2)
+    def __init__(self, 
+                size=4, 
+                position_matrix = [1, 2, 3, 4, 5, 6, 7, 8],
+                notation_history = [],
+                solution_history = [],
+                cube1 = None,
+                cube2 = None,
+                cube3 = None,
+                cube4 = None,
+                cube5 = None,
+                cube6 = None,
+                cube7 = None,
+                cube8 = None,
+                ):
+        self.position_matrix = position_matrix.copy()
+        self.notation_history = notation_history.copy()
+        self.solution_history = solution_history.copy()
+        
+        if cube1 == None:
+            self.Cube1 = Cube1(size / 2)
+        else:
+            self.Cube1 = cube1
+        
+        if cube2 == None:
+            self.Cube2 = Cube2(size / 2)
+        else:
+            self.Cube2 = cube2
+            
+        if cube3 == None:
+            self.Cube3 = Cube3(size / 2)
+        else:
+            self.Cube3 = cube3
+            
+        if cube4 == None:
+            self.Cube4 = Cube4(size / 2)
+        else:
+            self.Cube4 = cube4
+            
+        if cube5 == None:
+            self.Cube5 = Cube5(size / 2)
+        else:
+            self.Cube5 = cube5
+            
+        if cube6 == None:
+            self.Cube6 = Cube6(size / 2)
+        else:
+            self.Cube6 = cube6
+            
+        if cube7 == None:
+            self.Cube7 = Cube7(size / 2)
+        else:
+            self.Cube7 = cube7
+            
+        if cube8 == None:
+            self.Cube8 = Cube8(size / 2)
+        else:
+            self.Cube8 = cube8
+        
+    def copy(self):
+        pass
 
     def cube_array(self):
         return [self.Cube1, self.Cube2, self.Cube3, self.Cube4, self.Cube5, self.Cube6, self.Cube7, self.Cube8]
@@ -301,87 +348,123 @@ class Cube222:
 
         return matrix
     
-    def do_ui(self):
+    def do_ui(self, animated = True):
         for i in self.u_matrix():
             c = self.cube_array()[i-1]
-            c.animated_rotateY(90, False)
+            if animated:
+                c.animated_rotateY(90, False)
+            else:
+                c.rotateY(90,False)
         
         Cube222.apply_action(self.position_matrix,"ui")
 
-    def do_u(self):
+    def do_u(self, animated = True):
         for i in self.u_matrix():
             c = self.cube_array()[i-1]
-            c.animated_rotateY(-90, False)
+            if animated:
+                c.animated_rotateY(-90, False)
+            else:
+                c.rotateY(-90, False)
 
         Cube222.apply_action(self.position_matrix,"u")
                 
-    def do_di(self):
+    def do_di(self, animated = True):
         for i in self.d_matrix():
             c = self.cube_array()[i-1]
-            c.animated_rotateY(90, False)
+            if animated:
+                c.animated_rotateY(90, False)
+            else:
+                c.rotateY(90, False)
         
         Cube222.apply_action(self.position_matrix,"di")
 
-    def do_d(self):
+    def do_d(self, animated = True):
         for i in self.d_matrix():
             c = self.cube_array()[i-1]
-            c.animated_rotateY(-90, False)
+            if animated:
+                c.animated_rotateY(-90, False)
+            else:
+                c.rotateY(-90, False)
 
         Cube222.apply_action(self.position_matrix,"d")
         
-    def do_li(self):
+    def do_li(self, animated = True):
         for i in self.l_matrix():
             c = self.cube_array()[i-1]
-            c.animated_rotateX(90, False)
+            if animated:
+                c.animated_rotateX(90, False)
+            else:
+                c.rotateX(90, False)
 
         Cube222.apply_action(self.position_matrix,"li")
 
-    def do_l(self):
+    def do_l(self, animated = True):
         for i in self.l_matrix():
             c = self.cube_array()[i-1]
-            c.animated_rotateX(-90, False)
+            if animated:
+                c.animated_rotateX(-90, False)
+            else:
+                c.rotateX(-90, False)
 
         Cube222.apply_action(self.position_matrix,"l")
         
-    def do_ri(self):
+    def do_ri(self, animated = True):
         for i in self.r_matrix():
             c = self.cube_array()[i-1]
-            c.animated_rotateX(90, False)
+            if animated:
+                c.animated_rotateX(90, False)
+            else:
+                c.rotateX(90, False)
 
         Cube222.apply_action(self.position_matrix,"ri")
 
-    def do_r(self):
+    def do_r(self, animated = True):
         for i in self.r_matrix():
             c = self.cube_array()[i-1]
-            c.animated_rotateX(-90, False)
+            if animated:
+                c.animated_rotateX(-90, False)
+            else:
+                c.rotateX(-90, False)
         
         Cube222.apply_action(self.position_matrix,"r")
 
-    def do_fi(self):
+    def do_fi(self, animated = True):
         for i in self.f_matrix():
             c = self.cube_array()[i-1]
-            c.animated_rotateZ(90, False)
+            if animated:
+                c.animated_rotateZ(90, False)
+            else:
+                c.rotateZ(90, False)
 
         Cube222.apply_action(self.position_matrix,"fi")
 
-    def do_f(self):
+    def do_f(self, animated = True):
         for i in self.f_matrix():
             c = self.cube_array()[i-1]
-            c.animated_rotateZ(-90, False)
+            if animated:
+                c.animated_rotateZ(-90, False)
+            else:
+                c.rotateZ(-90, False)
 
         Cube222.apply_action(self.position_matrix,"f")
     
-    def do_bi(self):
+    def do_bi(self, animated = True):
         for i in self.b_matrix():
             c = self.cube_array()[i-1]
-            c.animated_rotateZ(90, False)
+            if animated:
+                c.animated_rotateZ(90, False)
+            else:
+                c.rotateZ(90, False)
 
         Cube222.apply_action(self.position_matrix,"bi")
 
-    def do_b(self):
+    def do_b(self, animated = True):
         for i in self.b_matrix():
             c = self.cube_array()[i-1]
-            c.animated_rotateZ(-90, False)
+            if animated:
+                c.animated_rotateZ(-90, False)
+            else:
+                c.rotateZ(-90, False)
         
         Cube222.apply_action(self.position_matrix,"b")
 
@@ -505,12 +588,7 @@ class Cube222:
             return
         
         notations = self.notations()
-        stack = []
-        stack.extend(notations)
-        for d in range(depth):
-            for s in stack:
-                for n in notations:
-                    stack.append(s + n)
+        cube 
 
         print(stack)
 

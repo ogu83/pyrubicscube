@@ -65,14 +65,24 @@ class Cube3D:
         (4,0,3,6),
     )       
 
-    def __init__(self, size = 1, color_u=YELLOW, color_d=WHITE, color_f=BLUE, color_b=GREEN, color_l=ORANGE, color_r=RED):
+    def __init__(self, 
+                 size = 1, 
+                 color_u=YELLOW, 
+                 color_d=WHITE, 
+                 color_f=BLUE, 
+                 color_b=GREEN, 
+                 color_l=ORANGE, 
+                 color_r=RED, 
+                 angle_x=[0, 0, False], 
+                 angle_y=[0, 0, False], 
+                 angle_z=[0, 0, False],
+                 translate_matrix=[0,0,0]):
         self.size = float(size)        
         
-        self.translate_matrix = [0, 0, 0]
+        self.translate_matrix = translate_matrix.copy()
         
-        self.verticies = UNIT_CUBE_VERTICIES
-        
-        self.verticies = np.array(self.verticies) * size
+        self.verticies = UNIT_CUBE_VERTICIES        
+        self.verticies = np.array(self.verticies) * size              
         
         self.color_d = color_d #WHITE
         self.color_u = color_u #YELLOW
@@ -81,9 +91,26 @@ class Cube3D:
         self.color_l = color_l #ORANGE
         self.color_r = color_r #RED
         
-        self.angle_x = [0, 0, False]
-        self.angle_y = [0, 0, False]
-        self.angle_z = [0, 0, False]
+        self.angle_x = angle_x.copy()
+        self.angle_y = angle_y.copy()
+        self.angle_z = angle_z.copy()
+        
+    def copy(self):
+        obj = Cube3D(self.size, 
+                  self.color_u, 
+                  self.color_d, 
+                  self.color_f, 
+                  self.color_b, 
+                  self.color_l, 
+                  self.color_r, 
+                  self.angle_x, 
+                  self.angle_y, 
+                  self.angle_z, 
+                  self.translate_matrix)
+                  
+        obj.verticies = self.verticies.copy()
+                      
+        return obj
         
     def get_angle_matrix(self):
         return [
