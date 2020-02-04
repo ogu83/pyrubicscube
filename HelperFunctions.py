@@ -24,3 +24,6 @@ def first(iterable, condition = lambda x: True):
     """
 
     return next(x for x in iterable if condition(x))
+    
+def permutation(list1,list2):
+    return list(set(map(' '.join, itertools.chain(itertools.product(list1, list2), itertools.product(list2, list1)))))

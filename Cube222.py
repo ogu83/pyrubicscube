@@ -2,6 +2,7 @@ from OpenGL_Geometry import *
 from threading import Timer
 from HelperFunctions import *
 import pickle as pk
+import sys
 
 class SNode():
     def __init__(self, from_matrix, to_matrix, notation, distance):
@@ -94,6 +95,7 @@ class Cube222:
                 cube7 = None,
                 cube8 = None,
                 ):
+        self.size = size
         self.position_matrix = position_matrix.copy()
         self.notation_history = notation_history.copy()
         self.solution_history = solution_history.copy()
@@ -139,7 +141,19 @@ class Cube222:
             self.Cube8 = cube8
         
     def copy(self):
-        pass
+        obj = Cube222(self.size,
+                      self.position_matrix,
+                      self.notation_history,
+                      self.solution_history,
+                      self.Cube1.copy(),
+                      self.Cube2.copy(),
+                      self.Cube3.copy(),
+                      self.Cube4.copy(),
+                      self.Cube5.copy(),
+                      self.Cube6.copy(),
+                      self.Cube7.copy(),
+                      self.Cube8.copy())
+        return obj
 
     def cube_array(self):
         return [self.Cube1, self.Cube2, self.Cube3, self.Cube4, self.Cube5, self.Cube6, self.Cube7, self.Cube8]
@@ -354,7 +368,7 @@ class Cube222:
             if animated:
                 c.animated_rotateY(90, False)
             else:
-                c.rotateY(90,False)
+                c.rotateY(90, False)
         
         Cube222.apply_action(self.position_matrix,"ui")
 
@@ -582,16 +596,76 @@ class Cube222:
 
         solve_func(1)
 
-    def dfs(self, depth = 2):
+    def dfs(self, depth = 4):
+    
+        def backline():        
+            print('\r', end='')
+            
         self.solution_history = []
         if self.is_solved():
             return
         
-        notations = self.notations()
-        cube 
-
-        print(stack)
-
+        notations = self.notations()        
+        
+        solutions = notations.copy()
+        for _ in range(depth):
+            solutions = permutation(solutions, notations)        
+                        
+        solution_found = False
+        sc = 0
+        lsc = len(solutions)
+        for s in solutions:
+            cube222 = self.copy()
+            n_arr = s.split(' ',)
+            
+            remove_on = False
+            for i, n in enumerate(n_arr):
+                if (i>0):
+                    if len(n_arr[i-1]) > 1 or len(n_arr[i]) > 1:
+                        if n_arr[i-1][0] == n_arr[i][0]:
+                            n_arr[i] = "_"
+                            n_arr[i-1] = "_"
+                            remove_on = True
+            
+            if remove_on:
+                n_arr.remove("_")                        
+            
+            ns_arr = []
+            for n in n_arr:                
+                ns_arr.append(n)
+                cube222.do_notation(n, True)
+                for cube in cube222.cube_array():
+                    cube.do_animations(90)
+                
+                if cube222.is_solved():
+                    print(self.position_matrix_str())
+                    print(ns_arr)
+                    print(cube222.position_matrix_str())
+                    print(cube222.is_solved())
+                    solution_found = True
+                    break
+            
+            if solution_found:
+                break
+            else:
+                if (sc % 1000 == 0):
+                    print(f"Progress: {sc}/{lsc}")
+                sc+=1
+                
+            del cube222
+            del n_arr
+            del ns_arr
+            
+                   
+        #print(solutions, len(solutions))
+        
+        # print(cube222.position_matrix_str())
+        # print(cube222.is_solved())
+        # cube222.do_notation("u",True)        
+        # for cube in cube222.cube_array():
+            # cube.do_animations(90)
+        # print(cube222.position_matrix_str())
+        # print(cube222.is_solved())
 
                 
     def animated_rotateY(self, angle, use_self_center):
