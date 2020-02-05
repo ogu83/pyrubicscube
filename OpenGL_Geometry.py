@@ -103,9 +103,9 @@ class Cube3D:
                   self.color_b, 
                   self.color_l, 
                   self.color_r, 
-                  self.angle_x, 
-                  self.angle_y, 
-                  self.angle_z, 
+                  self.angle_x.copy(), 
+                  self.angle_y.copy(), 
+                  self.angle_z.copy(), 
                   self.translate_matrix)
                   
         obj.verticies = self.verticies.copy()

@@ -104,7 +104,7 @@ class Simulation3:
                         else:
                             cube.scramble(20, PY_WAIT/100)
                     elif (event.key == pygame.K_F2):
-                        cube.dfs()
+                        cube.dfs(PY_WAIT/100)
                     elif (event.key == pygame.K_F3):
                         pass
                     

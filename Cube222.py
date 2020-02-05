@@ -3,6 +3,7 @@ from threading import Timer
 from HelperFunctions import *
 import pickle as pk
 import sys
+import datetime
 
 class SNode():
     def __init__(self, from_matrix, to_matrix, notation, distance):
@@ -139,6 +140,8 @@ class Cube222:
             self.Cube8 = Cube8(size / 2)
         else:
             self.Cube8 = cube8
+            
+        self.solutions = []
         
     def copy(self):
         obj = Cube222(self.size,
@@ -482,13 +485,16 @@ class Cube222:
         
         Cube222.apply_action(self.position_matrix,"b")
 
-    def notations(self):
+    def notations(self, use_inverse=True):
         def addi(elem):
             return elem + 'i'
 
         notations = ['u','d','f','b','l','r']
-        rn = list(map(addi, notations))
-        notations += rn
+        
+        if use_inverse:
+            rn = list(map(addi, notations))
+            notations += rn            
+            
         return notations
 
     def scramble(self, moves = 20, speed=0.2):
@@ -514,6 +520,20 @@ class Cube222:
                 Timer(speed * m, rollback_history_func, [1]).start()
                 
         rollback_history_func(1)
+        
+    def apply_solution(self, speed=0.2, notations=[]):
+        # print(speed, notations)   
+
+        mult = 1
+        if len(notations) > 0:        
+            notations = list(reversed(notations))
+        def apply_solution_func(m):            
+            if len(notations) > 0:
+                n = notations.pop()
+                self.do_notation(n, False)                
+                Timer(speed * m, apply_solution_func, [mult]).start()
+                
+        apply_solution_func(mult)
         
     def learn(self, sEpoch = 0, eEpoch=6, save_pickle=True, load_pickle=True, file_name="222nodes.pkl"):
         if not self.is_solved():
@@ -596,36 +616,56 @@ class Cube222:
 
         solve_func(1)
 
-    def dfs(self, depth = 4):
+    def dfs(self, speed=0.2, depth = 4):
     
         def backline():        
             print('\r', end='')
-            
+        
         self.solution_history = []
         if self.is_solved():
             return
         
         notations = self.notations()        
         
-        solutions = notations.copy()
-        for _ in range(depth):
-            solutions = permutation(solutions, notations)        
+        now = datetime.datetime.now()        
+        begin_time = now        
+        
+        if (len(self.solutions) == 0):
+            print(now.strftime("%H:%M:%S") + " | Calculating Possible Solutions, Depth: " + str(depth))
+            solutions = notations.copy()
+            for d in range(depth):
+                now = datetime.datetime.now()
+                print(f"{now.strftime('%H:%M:%S')} | Depth:{d}, Solution Count: {len(solutions)}")
+                solutions = permutation(solutions, notations)
+        
+            now = datetime.datetime.now()        
+            print(now.strftime("%H:%M:%S") + " | Possible Solutions Calculated")
+            self.solutions = solutions
+        else:
+            solutions = self.solutions
                         
         solution_found = False
         sc = 0
-        lsc = len(solutions)
+        lsc = len(solutions)        
         for s in solutions:
             cube222 = self.copy()
             n_arr = s.split(' ',)
             
             remove_on = False
             for i, n in enumerate(n_arr):
-                if (i>0):
-                    if len(n_arr[i-1]) > 1 or len(n_arr[i]) > 1:
-                        if n_arr[i-1][0] == n_arr[i][0]:
-                            n_arr[i] = "_"
-                            n_arr[i-1] = "_"
-                            remove_on = True
+                if (i > 2):
+                    if n_arr[i-3] == n_arr[i-2] and n_arr[i-2] == n_arr[i-1] and n_arr[i-1] == n_arr[i]:                        
+                        n_arr[i] = "_"
+                        n_arr[i-1] = "_"
+                        n_arr[i-2] = "_"
+                        n_arr[i-3] = "_"
+                        remove_on = True
+                elif (i > 1):
+                    if n_arr[i-2] == n_arr[i-1] and n_arr[i-1] == n_arr[i]:                        
+                        n_arr[i] = n_arr[i] + "i"
+                        n_arr[i-1] = "_"
+                        n_arr[i-2] = "_"
+                        remove_on = True
             
             if remove_on:
                 n_arr.remove("_")                        
@@ -638,24 +678,28 @@ class Cube222:
                     cube.do_animations(90)
                 
                 if cube222.is_solved():
+                    now = datetime.datetime.now()
+                    t_delta = now - begin_time
+                    print(now.strftime("%H:%M:%S"))
+                    print("Solved in " + str(t_delta))
                     print(self.position_matrix_str())
                     print(ns_arr)
                     print(cube222.position_matrix_str())
                     print(cube222.is_solved())
+                    self.apply_solution(speed, ns_arr)
                     solution_found = True
                     break
             
-            if solution_found:
+            if solution_found:                
                 break
             else:
                 if (sc % 1000 == 0):
-                    print(f"Progress: {sc}/{lsc}")
-                sc+=1
-                
-            del cube222
-            del n_arr
-            del ns_arr
-            
+                    now = datetime.datetime.now()        
+                    print(now.strftime("%H:%M:%S") + f" | Progress: {sc}/{lsc}")
+                sc += 1
+                del cube222
+                del n_arr
+                del ns_arr                                        
                    
         #print(solutions, len(solutions))
         
