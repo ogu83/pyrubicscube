@@ -616,7 +616,7 @@ class Cube222:
 
         solve_func(1)
 
-    def dfs(self, speed=0.2, depth = 4):
+    def dfs(self, speed=0.2, depth = 8):
     
         def backline():        
             print('\r', end='')
@@ -625,7 +625,7 @@ class Cube222:
         if self.is_solved():
             return
         
-        notations = self.notations()        
+        notations = self.notations(False)        
         
         now = datetime.datetime.now()        
         begin_time = now        
