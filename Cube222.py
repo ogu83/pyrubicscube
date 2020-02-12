@@ -197,13 +197,45 @@ class Cube222:
             cube.draw(animation_speed)
             
     def is_solved(self):
-        first = ""
-        for cube in self.cube_array():
-            if first == "":
-                first = SNode.matrix_hash(cube.get_angle_matrix())
-            elif first != SNode.matrix_hash(cube.get_angle_matrix()):
-                return False
-        return True
+        possible_solutions = [
+            '1234567800000000',
+            '241368573030303030303030',
+            '432187652020202020202020',
+            '314275861010101010101010',
+            '56127834300300300300300300300300',
+            '78563412200200200200200200200200',
+            '34781256100100100100100100100100',
+            '5173628433333333',
+            '6587214322222222',
+            '2648153711111111',
+            '75318642303303303303303303303303',
+            '87436521302302302302302302302302',
+            '68245713301301301301301301301301',
+            '37154826203203203203203203203203',
+            '43218765202202202202202202202202',
+            '84627351201201201201201201201201',            
+            '13572468103103103103103103103103',
+            '21654387102102102102102102102102',
+            '42863175101101101101101101101101',
+            '3142758611111111',
+            '7384516200000000',
+            '5768132433333333',
+            '1526374822222222',
+            '43218765301301301301301301301301',
+            '84627351300300300300300300300300',
+            '78563412303303303303303303303303',
+            '48372615202202202202202202202202',
+            '24136857201201201201201201201201',
+            '62518473200200200200200200200200'
+        ]
+        return self.position_matrix_str() in possible_solutions
+        # first = ""
+        # for cube in self.cube_array():
+            # if first == "":
+                # first = SNode.matrix_hash(cube.get_angle_matrix())
+            # elif first != SNode.matrix_hash(cube.get_angle_matrix()):
+                # return False
+        # return True
 
 
     def is_on_animation(self):
@@ -524,7 +556,7 @@ class Cube222:
     def apply_solution(self, speed=0.2, notations=[]):
         # print(speed, notations)   
 
-        mult = 1
+        mult = 1.5
         if len(notations) > 0:        
             notations = list(reversed(notations))
         def apply_solution_func(m):            
@@ -635,7 +667,7 @@ class Cube222:
             solutions = notations.copy()
             for d in range(depth):
                 now = datetime.datetime.now()
-                print(f"{now.strftime('%H:%M:%S')} | Depth:{d}, Solution Count: {len(solutions)}")
+                print(f"{now.strftime('%H:%M:%S')} | Depth:{d}, Count: {len(solutions)}, Last:{solutions[-1:]}")
                 solutions = permutation(solutions, notations)
         
             now = datetime.datetime.now()        
@@ -668,7 +700,8 @@ class Cube222:
                         remove_on = True
             
             if remove_on:
-                n_arr.remove("_")                        
+                #n_arr.remove("_")                        
+                n_arr = list(filter(("_").__ne__, n_arr))
             
             ns_arr = []
             for n in n_arr:                
@@ -695,21 +728,11 @@ class Cube222:
             else:
                 if (sc % 1000 == 0):
                     now = datetime.datetime.now()        
-                    print(now.strftime("%H:%M:%S") + f" | Progress: {sc}/{lsc}")
+                    print(f"{now.strftime('%H:%M:%S')} | Progress: {sc}/{lsc}, Last: {ns_arr}")
                 sc += 1
                 del cube222
                 del n_arr
-                del ns_arr                                        
-                   
-        #print(solutions, len(solutions))
-        
-        # print(cube222.position_matrix_str())
-        # print(cube222.is_solved())
-        # cube222.do_notation("u",True)        
-        # for cube in cube222.cube_array():
-            # cube.do_animations(90)
-        # print(cube222.position_matrix_str())
-        # print(cube222.is_solved())
+                del ns_arr                   
 
                 
     def animated_rotateY(self, angle, use_self_center):
