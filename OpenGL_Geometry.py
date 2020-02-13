@@ -246,17 +246,29 @@ class Cube3D:
             and self.angle_y[0] == self.angle_y[1] 
             and self.angle_z[0] == self.angle_z[1]) == False
         
-    def animated_rotateX(self, angle, use_self_center):
-        if (not self.is_on_animation()):
+    def animated_rotateX(self, angle, use_self_center, byPassAnimation = False):
+        if byPassAnimation:
+            self.angle_x[1] += angle
+            self.angle_x[0] = self.angle_x[1]            
+            self.angle_x[2] = use_self_center
+        elif not self.is_on_animation():
             self.angle_x[1] += angle
             self.angle_x[2] = use_self_center
         
-    def animated_rotateY(self, angle, use_self_center):
-        if (not self.is_on_animation()):
+    def animated_rotateY(self, angle, use_self_center, byPassAnimation = False):    
+        if byPassAnimation:
+            self.angle_y[1] += angle
+            self.angle_y[0] = self.angle_y[1]            
+            self.angle_y[2] = use_self_center
+        elif not self.is_on_animation():
             self.angle_y[1] += angle
             self.angle_y[2] = use_self_center
         
-    def animated_rotateZ(self, angle, use_self_center):
-        if (not self.is_on_animation()):
+    def animated_rotateZ(self, angle, use_self_center, byPassAnimation = False):    
+        if byPassAnimation:
+            self.angle_z[1] += angle
+            self.angle_z[0] = self.angle_z[1]            
+            self.angle_z[2] = use_self_center
+        elif not self.is_on_animation():
             self.angle_z[1] += angle
             self.angle_z[2] = use_self_center

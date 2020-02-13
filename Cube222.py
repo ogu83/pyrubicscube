@@ -81,6 +81,8 @@ class Cube8(Cube3D):
 
 
 class Cube222:
+
+    
     
     def __init__(self, 
                 size=4, 
@@ -142,6 +144,7 @@ class Cube222:
             self.Cube8 = cube8
             
         self.solutions = []
+        self.solutions_dictionary = dict()
         
     def copy(self):
         obj = Cube222(self.size,
@@ -184,13 +187,11 @@ class Cube222:
     def b_matrix(self):
         position_matrix = self.position_matrix
         return [position_matrix[2], position_matrix[3], position_matrix[6], position_matrix[7]]
-        
-    def position_matrix_str(self):
-        retval = [SNode.matrix_hash(self.position_matrix)]
-        for cube in self.cube_array():
-            retval.append(SNode.matrix_hash(cube.get_angle_matrix()))
-        retval = SNode.matrix_hash(retval);        
-        return str(retval)
+                   
+    def position_matrix_str(self):        
+        retval = (self.position_matrix) + [SNode.matrix_hash(cube.get_angle_matrix()) for cube in self.cube_array()]
+        retval = str(SNode.matrix_hash(retval))            
+        return retval
 
     def draw(self, animation_speed=15):
         for cube in self.cube_array():
@@ -199,15 +200,19 @@ class Cube222:
     def is_solved(self):
         possible_solutions = [
             '1234567800000000',
+            '5173628433333333',
+            '6587214322222222',
+            '2648153711111111',
+            '3142758611111111',
+            '7384516200000000',
+            '5768132433333333',
+            '1526374822222222',
             '241368573030303030303030',
             '432187652020202020202020',
             '314275861010101010101010',
             '56127834300300300300300300300300',
             '78563412200200200200200200200200',
-            '34781256100100100100100100100100',
-            '5173628433333333',
-            '6587214322222222',
-            '2648153711111111',
+            '34781256100100100100100100100100',            
             '75318642303303303303303303303303',
             '87436521302302302302302302302302',
             '68245713301301301301301301301301',
@@ -216,11 +221,7 @@ class Cube222:
             '84627351201201201201201201201201',            
             '13572468103103103103103103103103',
             '21654387102102102102102102102102',
-            '42863175101101101101101101101101',
-            '3142758611111111',
-            '7384516200000000',
-            '5768132433333333',
-            '1526374822222222',
+            '42863175101101101101101101101101',            
             '43218765301301301301301301301301',
             '84627351300300300300300300300300',
             '78563412303303303303303303303303',
@@ -245,34 +246,35 @@ class Cube222:
 
         return False
             
-    def do_notation(self, notation, historyOff = False):
-        if self.is_on_animation():
-            return
+    def do_notation(self, notation, historyOff = False, animated = True):
+        if (animated):
+            if self.is_on_animation():
+                return
     
-        if notation == "u":
-            self.do_u()
+        if notation == "u":            
+            self.do_u(animated)
         elif notation == "ui":
-            self.do_ui()
+            self.do_ui(animated)
         elif notation == "d":
-            self.do_d()
+            self.do_d(animated)
         elif notation == "di":
-            self.do_di()
+            self.do_di(animated)
         elif notation == "l":
-            self.do_l()
+            self.do_l(animated)
         elif notation == "li":
-            self.do_li()
+            self.do_li(animated)
         elif notation == "r":
-            self.do_r()
+            self.do_r(animated)
         elif notation == "ri":
-            self.do_ri()
+            self.do_ri(animated)
         elif notation == "f":
-            self.do_f()
+            self.do_f(animated)
         elif notation == "fi":
-            self.do_fi()
+            self.do_fi(animated)
         elif notation == "b":
-            self.do_b()
+            self.do_b(animated)
         elif notation == "bi":
-            self.do_bi()
+            self.do_bi(animated)
 
         if (not historyOff):
             self.notation_history.append(notation)
@@ -400,120 +402,84 @@ class Cube222:
     def do_ui(self, animated = True):
         for i in self.u_matrix():
             c = self.cube_array()[i-1]
-            if animated:
-                c.animated_rotateY(90, False)
-            else:
-                c.rotateY(90, False)
+            c.animated_rotateY(90, False, not animated)
         
         Cube222.apply_action(self.position_matrix,"ui")
 
     def do_u(self, animated = True):
         for i in self.u_matrix():
-            c = self.cube_array()[i-1]
-            if animated:
-                c.animated_rotateY(-90, False)
-            else:
-                c.rotateY(-90, False)
+            c = self.cube_array()[i-1]            
+            c.animated_rotateY(-90, False, not animated)            
 
         Cube222.apply_action(self.position_matrix,"u")
                 
     def do_di(self, animated = True):
         for i in self.d_matrix():
             c = self.cube_array()[i-1]
-            if animated:
-                c.animated_rotateY(90, False)
-            else:
-                c.rotateY(90, False)
+            c.animated_rotateY(90, False, not animated)
         
         Cube222.apply_action(self.position_matrix,"di")
 
     def do_d(self, animated = True):
         for i in self.d_matrix():
             c = self.cube_array()[i-1]
-            if animated:
-                c.animated_rotateY(-90, False)
-            else:
-                c.rotateY(-90, False)
+            c.animated_rotateY(-90, False, not animated)
 
         Cube222.apply_action(self.position_matrix,"d")
         
     def do_li(self, animated = True):
         for i in self.l_matrix():
             c = self.cube_array()[i-1]
-            if animated:
-                c.animated_rotateX(90, False)
-            else:
-                c.rotateX(90, False)
+            c.animated_rotateX(90, False, not animated)
 
         Cube222.apply_action(self.position_matrix,"li")
 
     def do_l(self, animated = True):
         for i in self.l_matrix():
             c = self.cube_array()[i-1]
-            if animated:
-                c.animated_rotateX(-90, False)
-            else:
-                c.rotateX(-90, False)
+            c.animated_rotateX(-90, False, not animated)
 
         Cube222.apply_action(self.position_matrix,"l")
         
     def do_ri(self, animated = True):
         for i in self.r_matrix():
             c = self.cube_array()[i-1]
-            if animated:
-                c.animated_rotateX(90, False)
-            else:
-                c.rotateX(90, False)
+            c.animated_rotateX(90, False, not animated)
 
         Cube222.apply_action(self.position_matrix,"ri")
 
     def do_r(self, animated = True):
         for i in self.r_matrix():
             c = self.cube_array()[i-1]
-            if animated:
-                c.animated_rotateX(-90, False)
-            else:
-                c.rotateX(-90, False)
+            c.animated_rotateX(-90, False, not animated)
         
         Cube222.apply_action(self.position_matrix,"r")
 
     def do_fi(self, animated = True):
         for i in self.f_matrix():
             c = self.cube_array()[i-1]
-            if animated:
-                c.animated_rotateZ(90, False)
-            else:
-                c.rotateZ(90, False)
+            c.animated_rotateZ(90, False, not animated)
 
         Cube222.apply_action(self.position_matrix,"fi")
 
     def do_f(self, animated = True):
         for i in self.f_matrix():
             c = self.cube_array()[i-1]
-            if animated:
-                c.animated_rotateZ(-90, False)
-            else:
-                c.rotateZ(-90, False)
+            c.animated_rotateZ(-90, False, not animated)
 
         Cube222.apply_action(self.position_matrix,"f")
     
     def do_bi(self, animated = True):
         for i in self.b_matrix():
             c = self.cube_array()[i-1]
-            if animated:
-                c.animated_rotateZ(90, False)
-            else:
-                c.rotateZ(90, False)
+            c.animated_rotateZ(90, False, not animated)
 
         Cube222.apply_action(self.position_matrix,"bi")
 
     def do_b(self, animated = True):
         for i in self.b_matrix():
-            c = self.cube_array()[i-1]
-            if animated:
-                c.animated_rotateZ(-90, False)
-            else:
-                c.rotateZ(-90, False)
+            c = self.cube_array()[i-1]           
+            c.animated_rotateZ(-90, False, not animated)
         
         Cube222.apply_action(self.position_matrix,"b")
 
@@ -648,7 +614,7 @@ class Cube222:
 
         solve_func(1)
 
-    def dfs(self, speed=0.2, depth = 8):
+    def dfs(self, speed=0.2, depth = 1, begin_time = datetime.datetime.now()):
     
         def backline():        
             print('\r', end='')
@@ -657,24 +623,26 @@ class Cube222:
         if self.is_solved():
             return
         
-        notations = self.notations(False)        
+        notations = self.notations(False)
+        solutions = notations.copy()
         
+        # if (len(self.solutions) == 0):
+        print(begin_time.strftime("%H:%M:%S") + " | Calculating Possible Solutions, Depth: " + str(depth))        
+        for d in range(depth):                                  
+            if d in self.solutions_dictionary:
+                solutions = self.solutions_dictionary[d]
+            else:                           
+                solutions = permutation(solutions, notations)                
+                self.solutions_dictionary[d] = solutions
+            
+            now = datetime.datetime.now()            
+            print(f"{now.strftime('%H:%M:%S')} | Depth:{d}, Count: {len(solutions)}, Last:{solutions[-1:]}")           
+    
         now = datetime.datetime.now()        
-        begin_time = now        
-        
-        if (len(self.solutions) == 0):
-            print(now.strftime("%H:%M:%S") + " | Calculating Possible Solutions, Depth: " + str(depth))
-            solutions = notations.copy()
-            for d in range(depth):
-                now = datetime.datetime.now()
-                print(f"{now.strftime('%H:%M:%S')} | Depth:{d}, Count: {len(solutions)}, Last:{solutions[-1:]}")
-                solutions = permutation(solutions, notations)
-        
-            now = datetime.datetime.now()        
-            print(now.strftime("%H:%M:%S") + " | Possible Solutions Calculated")
-            self.solutions = solutions
-        else:
-            solutions = self.solutions
+        print(now.strftime("%H:%M:%S") + " | Possible Solutions Calculated")
+        self.solutions = solutions
+        # else:
+            # solutions = self.solutions
                         
         solution_found = False
         sc = 0
@@ -682,46 +650,57 @@ class Cube222:
         for s in solutions:
             cube222 = self.copy()
             n_arr = s.split(' ',)
-            
-            remove_on = False
-            for i, n in enumerate(n_arr):
-                if (i > 2):
-                    if n_arr[i-3] == n_arr[i-2] and n_arr[i-2] == n_arr[i-1] and n_arr[i-1] == n_arr[i]:                        
-                        n_arr[i] = "_"
-                        n_arr[i-1] = "_"
-                        n_arr[i-2] = "_"
-                        n_arr[i-3] = "_"
-                        remove_on = True
-                elif (i > 1):
-                    if n_arr[i-2] == n_arr[i-1] and n_arr[i-1] == n_arr[i]:                        
-                        n_arr[i] = n_arr[i] + "i"
-                        n_arr[i-1] = "_"
-                        n_arr[i-2] = "_"
-                        remove_on = True
-            
-            if remove_on:
-                #n_arr.remove("_")                        
-                n_arr = list(filter(("_").__ne__, n_arr))
+                             
+            # Clear ot repeated known rotations make less
+            while(True):
+                remove_on = False
+                repeated_rotations = False
+                for i, n in enumerate(n_arr):
+                    if (i > 2):
+                        if n_arr[i-3] == n_arr[i-2] and n_arr[i-2] == n_arr[i-1] and n_arr[i-1] == n_arr[i]:                        
+                            n_arr[i] = "_"
+                            n_arr[i-1] = "_"
+                            n_arr[i-2] = "_"
+                            n_arr[i-3] = "_"
+                            remove_on = True
+                            repeated_rotations = True
+                    elif (i > 1):
+                        if n_arr[i-2] == n_arr[i-1] and n_arr[i-1] == n_arr[i]:                        
+                            n_arr[i] = n_arr[i] + "i"
+                            n_arr[i-1] = "_"
+                            n_arr[i-2] = "_"
+                            remove_on = True
+                            repeated_rotations = True
+                    elif (i > 0):
+                        if n_arr[i-1] == n_arr[i] + "i":
+                            n_arr[i] = "_"
+                            n_arr[i-1] = "_"
+                            remove_on = True
+                            repeated_rotations = True
+                
+                if remove_on:                    
+                    n_arr = list(filter(("_").__ne__, n_arr))
+                    
+                if not repeated_rotations:
+                    break
             
             ns_arr = []
             for n in n_arr:                
                 ns_arr.append(n)
-                cube222.do_notation(n, True)
-                for cube in cube222.cube_array():
-                    cube.do_animations(90)
+                cube222.do_notation(n, True, False)                
                 
-                if cube222.is_solved():
-                    now = datetime.datetime.now()
-                    t_delta = now - begin_time
-                    print(now.strftime("%H:%M:%S"))
-                    print("Solved in " + str(t_delta))
-                    print(self.position_matrix_str())
-                    print(ns_arr)
-                    print(cube222.position_matrix_str())
-                    print(cube222.is_solved())
-                    self.apply_solution(speed, ns_arr)
-                    solution_found = True
-                    break
+            if cube222.is_solved():
+                now = datetime.datetime.now()
+                t_delta = now - begin_time
+                print(now.strftime("%H:%M:%S"))
+                print("Solved in " + str(t_delta))
+                print("From: " + self.position_matrix_str())
+                print("Solution: " + str(ns_arr))
+                print("To: " + cube222.position_matrix_str())
+                # print(cube222.is_solved())
+                self.apply_solution(speed, ns_arr)
+                solution_found = True
+                # break
             
             if solution_found:                
                 break
@@ -734,6 +713,8 @@ class Cube222:
                 del n_arr
                 del ns_arr                   
 
+        if not solution_found:        
+            self.dfs(speed, depth + 1, begin_time)
                 
     def animated_rotateY(self, angle, use_self_center):
         pass
