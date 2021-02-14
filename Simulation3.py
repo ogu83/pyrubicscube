@@ -25,7 +25,7 @@ class Simulation3:
     on_key_s = False
     on_key_d = False
           
-    def __init__(self, win_width = 800, win_height = 600):
+    def __init__(self, win_width = 1600, win_height = 1200):
         self.win_width = win_width
         self.win_height = win_height
         
