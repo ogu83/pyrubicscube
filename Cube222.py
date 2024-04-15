@@ -360,116 +360,25 @@ class Cube222:
 
     @staticmethod
     def apply_action(matrix, notation):
-        if notation == "u":
-            p1 = matrix[0]
-            p2 = matrix[1]
-            p3 = matrix[2]
-            p4 = matrix[3]            
-            matrix[0] = p2
-            matrix[1] = p4
-            matrix[2] = p1
-            matrix[3] = p3                    
-        elif notation == "ui":
-            p1 = matrix[0]
-            p2 = matrix[1]
-            p3 = matrix[2]
-            p4 = matrix[3]
-            matrix[0] = p3
-            matrix[1] = p1
-            matrix[2] = p4
-            matrix[3] = p2
-        elif notation == "d":
-            p5 = matrix[4]
-            p6 = matrix[5]
-            p7 = matrix[6]
-            p8 = matrix[7]            
-            matrix[4] = p6
-            matrix[5] = p8
-            matrix[6] = p5
-            matrix[7] = p7
-        elif notation == "di":
-            p5 = matrix[4]
-            p6 = matrix[5]
-            p7 = matrix[6]
-            p8 = matrix[7]            
-            matrix[4] = p7
-            matrix[5] = p5
-            matrix[6] = p8
-            matrix[7] = p6
-        elif notation == "l":
-            p1 = matrix[0]
-            p3 = matrix[2]
-            p5 = matrix[4]
-            p7 = matrix[6]            
-            matrix[0] = p5
-            matrix[2] = p1
-            matrix[4] = p7
-            matrix[6] = p3
-        elif notation == "li":
-            p1 = matrix[0]
-            p3 = matrix[2]
-            p5 = matrix[4]
-            p7 = matrix[6]        
-            matrix[0] = p3
-            matrix[2] = p7
-            matrix[4] = p1
-            matrix[6] = p5
-        elif notation == "r":
-            p2 = matrix[1]
-            p4 = matrix[3]
-            p6 = matrix[5]
-            p8 = matrix[7]            
-            matrix[1] = p6
-            matrix[3] = p2
-            matrix[5] = p8
-            matrix[7] = p4
-        elif notation == "ri":
-            p2 = matrix[1]
-            p4 = matrix[3]
-            p6 = matrix[5]
-            p8 = matrix[7]            
-            matrix[1] = p4
-            matrix[3] = p8
-            matrix[5] = p2
-            matrix[7] = p6
-        elif notation == "f":
-            p1 = matrix[0]
-            p2 = matrix[1]
-            p5 = matrix[4]
-            p6 = matrix[5]            
-            matrix[0] = p5
-            matrix[1] = p1
-            matrix[4] = p6
-            matrix[5] = p2
-        elif notation == "fi":
-            p1 = matrix[0]
-            p2 = matrix[1]
-            p5 = matrix[4]
-            p6 = matrix[5]            
-            matrix[0] = p2
-            matrix[1] = p6
-            matrix[4] = p1
-            matrix[5] = p5
-        elif notation == "b":
-            p3 = matrix[2]
-            p4 = matrix[3]
-            p7 = matrix[6]
-            p8 = matrix[7]            
-            matrix[2] = p7
-            matrix[3] = p3
-            matrix[6] = p8
-            matrix[7] = p4
-        elif notation == "bi":
-            p3 = matrix[2]
-            p4 = matrix[3]
-            p7 = matrix[6]
-            p8 = matrix[7]            
-            matrix[2] = p4
-            matrix[3] = p8
-            matrix[6] = p3
-            matrix[7] = p7
+        idx_map = {
+            'u': ([0, 1, 2, 3], [1, 3, 0, 2]),
+            'ui': ([0, 1, 2, 3], [2, 0, 3, 1]),
+            'd': ([4, 5, 6, 7], [5, 7, 4, 6]),
+            'di': ([4, 5, 6, 7], [6, 4, 7, 5]),
+            'l': ([0, 2, 4, 6], [4, 0, 6, 2]),
+            'li': ([0, 2, 4, 6], [2, 6, 0, 4]),
+            'r': ([1, 3, 5, 7], [5, 1, 7, 3]),
+            'ri': ([1, 3, 5, 7], [3, 7, 1, 5]),
+            'f': ([0, 1, 4, 5], [4, 0, 5, 1]),
+            'fi': ([0, 1, 4, 5], [1, 5, 0, 4]),
+            'b': ([2, 3, 6, 7], [6, 2, 7, 3]),
+            'bi': ([2, 3, 6, 7], [3, 7, 2, 6])
+        }
+        if notation in idx_map:
+            indices, new_order = idx_map[notation]
+            matrix[indices[0]], matrix[indices[1]], matrix[indices[2]], matrix[indices[3]] = \
+                matrix[new_order[0]], matrix[new_order[1]], matrix[new_order[2]], matrix[new_order[3]]
 
-        return matrix
     
     def do_ui(self, animated = True):
         for i in self.u_matrix():
