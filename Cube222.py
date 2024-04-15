@@ -200,34 +200,106 @@ class Cube222:
     def is_solved(self):
         possible_solutions = [
             '1234567800000000',
+            '56127834300300300300300300300300',
+            '78563412200200200200200200200200',
+            '34781256100100100100100100100100',
+            '1234567800000000',
+            '241368573030303030303030',
+            '68245713330330330330330330330330',
+            '13572468130130130130130130130130',
+            '241368573030303030303030',
+            '68245713330330330330330330330330',
+            '57681324230230230230230230230230',
+            '13572468130130130130130130130130',
+            '241368573030303030303030',
+            '68245713330330330330330330330330',
+            '84627351320320320320320320320320',
+            '73845162220220220220220220220220',
+            '51736284120120120120120120120120',
+            '625184732020202020202020',
+            '84627351320320320320320320320320',
+            '42863175310310310310310310310310',
+            '31427586210210210210210210210210',
+            '75318642110110110110110110110110',
+            '867542311010101010101010',
+            '42863175310310310310310310310310',
+            '26481537300300300300300300300300',
+            '15263748200200200200200200200200',
+            '37154826100100100100100100100100',
+            '4837261500000000',
+            '26481537300300300300300300300300',
+            '68245713330330330330330330330330',
+            '57681324230230230230230230230230',
+            '13572468130130130130130130130130',
+            '241368573030303030303030',
+            '68245713330330330330330330330330',
+            '57681324230230230230230230230230',
+            '13572468130130130130130130130130',
+            '37154826120120120120120120120120',
+            '483726152020202020202020',
+            '26481537320320320320320320320320',
+            '15263748220220220220220220220220',
+            '37154826120120120120120120120120',
+            '483726152020202020202020',
+            '26481537320320320320320320320320',
+            '68245713310310310310310310310310',
+            '57681324210210210210210210210210',
+            '13572468110110110110110110110110',
+            '241368571010101010101010',
+            '68245713310310310310310310310310',
+            '57681324210210210210210210210210',
+            '13572468110110110110110110110110',
+            '241368571010101010101010',
+            '68245713310310310310310310310310',
+            '84627351300300300300300300300300',
+            '73845162200200200200200200200200',
+            '51736284100100100100100100100100',
+            '6251847300000000',
+            '84627351300300300300300300300300',
+            '73845162200200200200200200200200',
+            '51736284100100100100100100100100',
+            '13572468130130130130130130130130',
+            '241368573030303030303030',
+            '68245713330330330330330330330330',
+            '1234567800000000',
+            '12345678200200200200200200200200',
             '5173628433333333',
             '6587214322222222',
+            '65872143202202202202202202202202',
+            '65872143220220220220220220220220',
             '2648153711111111',
             '3142758611111111',
+            '314275861010101010101010',
+            '31427586210210210210210210210210',
             '7384516200000000',
             '5768132433333333',
             '1526374822222222',
             '241368573030303030303030',
             '432187652020202020202020',
-            '314275861010101010101010',
+            '43218765202202202202202202202202',
+            '43218765301301301301301301301301',
             '56127834300300300300300300300300',
+            '56127834100100100100100100100100',
             '78563412200200200200200200200200',
+            '78563412303303303303303303303303',
             '34781256100100100100100100100100',            
             '75318642303303303303303303303303',
             '87436521302302302302302302302302',
+            '87436521320320320320320320320320',
+            '87436521120120120120120120120120',
             '68245713301301301301301301301301',
             '37154826203203203203203203203203',
-            '43218765202202202202202202202202',
-            '84627351201201201201201201201201',            
+            '84627351201201201201201201201201',   
+            '84627351300300300300300300300300',
             '13572468103103103103103103103103',
             '21654387102102102102102102102102',
+            '21654387120120120120120120120120',
+            '21654387320320320320320320320320',
             '42863175101101101101101101101101',            
-            '43218765301301301301301301301301',
-            '84627351300300300300300300300300',
-            '78563412303303303303303303303303',
             '48372615202202202202202202202202',
             '24136857201201201201201201201201',
-            '62518473200200200200200200200200'
+            '62518473200200200200200200200200',
+            '56127834333333333333333333333333',            
         ]
         return self.position_matrix_str() in possible_solutions
         # first = ""
@@ -614,107 +686,149 @@ class Cube222:
 
         solve_func(1)
 
-    def dfs(self, speed=0.2, depth = 1, begin_time = datetime.datetime.now()):
+
+    # def dfs(self, speed=0.2, depth = 1, begin_time = datetime.datetime.now()):
     
-        def backline():        
-            print('\r', end='')
+    #     def backline():        
+    #         print('\r', end='')
         
-        self.solution_history = []
+    #     self.solution_history = []
+    #     if self.is_solved():
+    #         return
+        
+    #     notations = self.notations(False)
+    #     solutions = notations.copy()
+        
+    #     # if (len(self.solutions) == 0):
+    #     print(begin_time.strftime("%H:%M:%S") + " | Calculating Possible Solutions, Depth: " + str(depth))        
+    #     for d in range(depth):                                  
+    #         if d in self.solutions_dictionary:
+    #             solutions = self.solutions_dictionary[d]
+    #         else:                           
+    #             solutions = permutation(solutions, notations)                
+    #             self.solutions_dictionary[d] = solutions
+            
+    #         now = datetime.datetime.now()            
+    #         print(f"{now.strftime('%H:%M:%S')} | Depth:{d}, Count: {len(solutions)}, Last:{solutions[-1:]}")           
+    
+    #     now = datetime.datetime.now()        
+    #     print(now.strftime("%H:%M:%S") + " | Possible Solutions Calculated")
+    #     self.solutions = solutions
+    #     # else:
+    #         # solutions = self.solutions
+                        
+    #     solution_found = False
+    #     sc = 0
+    #     lsc = len(solutions)        
+    #     for s in solutions:
+    #         cube222 = self.copy()
+    #         n_arr = s.split(' ',)
+                             
+    #         # Clear ot repeated known rotations make less
+    #         while(True):
+    #             remove_on = False
+    #             repeated_rotations = False
+    #             for i, n in enumerate(n_arr):
+    #                 if (i > 2):
+    #                     if n_arr[i-3] == n_arr[i-2] and n_arr[i-2] == n_arr[i-1] and n_arr[i-1] == n_arr[i]:                        
+    #                         n_arr[i] = "_"
+    #                         n_arr[i-1] = "_"
+    #                         n_arr[i-2] = "_"
+    #                         n_arr[i-3] = "_"
+    #                         remove_on = True
+    #                         repeated_rotations = True
+    #                 elif (i > 1):
+    #                     if n_arr[i-2] == n_arr[i-1] and n_arr[i-1] == n_arr[i]:                        
+    #                         n_arr[i] = n_arr[i] + "i"
+    #                         n_arr[i-1] = "_"
+    #                         n_arr[i-2] = "_"
+    #                         remove_on = True
+    #                         repeated_rotations = True
+    #                 elif (i > 0):
+    #                     if n_arr[i-1] == n_arr[i] + "i":
+    #                         n_arr[i] = "_"
+    #                         n_arr[i-1] = "_"
+    #                         remove_on = True
+    #                         repeated_rotations = True
+                
+    #             if remove_on:                    
+    #                 n_arr = list(filter(("_").__ne__, n_arr))
+                    
+    #             if not repeated_rotations:
+    #                 break
+            
+    #         ns_arr = []
+    #         for n in n_arr:                
+    #             ns_arr.append(n)
+    #             cube222.do_notation(n, True, False)                
+                
+    #         if cube222.is_solved():
+    #             now = datetime.datetime.now()
+    #             t_delta = now - begin_time
+    #             print(now.strftime("%H:%M:%S"))
+    #             print("Solved in " + str(t_delta))
+    #             print("From: " + self.position_matrix_str())
+    #             print("Solution: " + str(ns_arr))
+    #             print("To: " + cube222.position_matrix_str())
+    #             # print(cube222.is_solved())
+    #             self.apply_solution(speed, ns_arr)
+    #             solution_found = True
+    #             # break
+            
+    #         if solution_found:                
+    #             break
+    #         else:
+    #             if (sc % 1000 == 0):
+    #                 now = datetime.datetime.now()        
+    #                 print(f"{now.strftime('%H:%M:%S')} | Progress: {sc}/{lsc}, Last: {ns_arr}")
+    #             sc += 1
+    #             del cube222
+    #             del n_arr
+    #             del ns_arr                   
+
+    #     if not solution_found:        
+    #         self.dfs(speed, depth + 1, begin_time)
+
+    def dfs(self, speed=0.2, depth=1, begin_time=datetime.datetime.now()):
+        from itertools import product
+        import datetime
+
         if self.is_solved():
             return
-        
-        notations = self.notations(False)
-        solutions = notations.copy()
-        
-        # if (len(self.solutions) == 0):
-        print(begin_time.strftime("%H:%M:%S") + " | Calculating Possible Solutions, Depth: " + str(depth))        
-        for d in range(depth):                                  
-            if d in self.solutions_dictionary:
-                solutions = self.solutions_dictionary[d]
-            else:                           
-                solutions = permutation(solutions, notations)                
-                self.solutions_dictionary[d] = solutions
-            
-            now = datetime.datetime.now()            
-            print(f"{now.strftime('%H:%M:%S')} | Depth:{d}, Count: {len(solutions)}, Last:{solutions[-1:]}")           
-    
-        now = datetime.datetime.now()        
-        print(now.strftime("%H:%M:%S") + " | Possible Solutions Calculated")
-        self.solutions = solutions
-        # else:
-            # solutions = self.solutions
-                        
-        solution_found = False
-        sc = 0
-        lsc = len(solutions)        
-        for s in solutions:
-            cube222 = self.copy()
-            n_arr = s.split(' ',)
-                             
-            # Clear ot repeated known rotations make less
-            while(True):
-                remove_on = False
-                repeated_rotations = False
-                for i, n in enumerate(n_arr):
-                    if (i > 2):
-                        if n_arr[i-3] == n_arr[i-2] and n_arr[i-2] == n_arr[i-1] and n_arr[i-1] == n_arr[i]:                        
-                            n_arr[i] = "_"
-                            n_arr[i-1] = "_"
-                            n_arr[i-2] = "_"
-                            n_arr[i-3] = "_"
-                            remove_on = True
-                            repeated_rotations = True
-                    elif (i > 1):
-                        if n_arr[i-2] == n_arr[i-1] and n_arr[i-1] == n_arr[i]:                        
-                            n_arr[i] = n_arr[i] + "i"
-                            n_arr[i-1] = "_"
-                            n_arr[i-2] = "_"
-                            remove_on = True
-                            repeated_rotations = True
-                    elif (i > 0):
-                        if n_arr[i-1] == n_arr[i] + "i":
-                            n_arr[i] = "_"
-                            n_arr[i-1] = "_"
-                            remove_on = True
-                            repeated_rotations = True
-                
-                if remove_on:                    
-                    n_arr = list(filter(("_").__ne__, n_arr))
-                    
-                if not repeated_rotations:
-                    break
-            
-            ns_arr = []
-            for n in n_arr:                
-                ns_arr.append(n)
-                cube222.do_notation(n, True, False)                
-                
-            if cube222.is_solved():
-                now = datetime.datetime.now()
-                t_delta = now - begin_time
-                print(now.strftime("%H:%M:%S"))
-                print("Solved in " + str(t_delta))
-                print("From: " + self.position_matrix_str())
-                print("Solution: " + str(ns_arr))
-                print("To: " + cube222.position_matrix_str())
-                # print(cube222.is_solved())
-                self.apply_solution(speed, ns_arr)
-                solution_found = True
-                # break
-            
-            if solution_found:                
-                break
-            else:
-                if (sc % 1000 == 0):
-                    now = datetime.datetime.now()        
-                    print(f"{now.strftime('%H:%M:%S')} | Progress: {sc}/{lsc}, Last: {ns_arr}")
-                sc += 1
-                del cube222
-                del n_arr
-                del ns_arr                   
 
-        if not solution_found:        
+        notations = self.notations(False)
+        solution_found = False
+
+        # Generate all possible combinations of moves up to the given depth
+        potential_solutions = product(notations, repeat=depth)
+
+        print(f"{datetime.datetime.now().strftime('%H:%M:%S')} | Calculating Possible Solutions, Depth: {depth}")
+
+        for solution in potential_solutions:
+            cube222 = self.copy()
+            for move in solution:
+                cube222.do_notation(move, True, False)
+                if cube222.is_solved():
+                    solution_found = True
+                    solution_time = datetime.datetime.now()
+                    time_taken = solution_time - begin_time
+
+                    print(solution_time.strftime("%H:%M:%S"))
+                    print(f"Solved in {time_taken}")
+                    print(f"From: {self.position_matrix_str()}")
+                    print(f"Solution: {' '.join(solution)}")
+                    print(f"To: {cube222.position_matrix_str()}")
+
+                    self.apply_solution(speed, list(solution))
+                    break
+
+            if solution_found:
+                break
+
+        if not solution_found:
+            print("Increasing depth and continuing search...")
             self.dfs(speed, depth + 1, begin_time)
+
                 
     def animated_rotateY(self, angle, use_self_center):
         pass
